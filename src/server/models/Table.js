@@ -14,4 +14,4 @@ var Table = new Schema({
   }
 });
 
-module.exports = Table;
+module.exports = mongoose.model('Table', Table);

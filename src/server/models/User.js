@@ -7,4 +7,4 @@ var User = new Schema({
   accountBalance: Number
 });
 
-module.exports = User;
+module.exports = mongoose.model('User', User);
