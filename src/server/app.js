@@ -5,6 +5,9 @@ var io = require('socket.io')(server);
 var routes = require('./routes');
 var boom = require('express-boom');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/blackjack');
 
 io.on('connection', function (socket) {
   socket.on('create', function (room) {
