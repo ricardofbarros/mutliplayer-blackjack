@@ -1,0 +1,15 @@
+.formBox {
+  margin-top: 50px;
+}
+
+.formBox .panel-body {
+  margin-top: 15px;
+}
+
+.formBox .field {
+  margin-bottom: 20px;
+}
+
+.formBox .form-submit {
+  margin-top: 10px;
+}
