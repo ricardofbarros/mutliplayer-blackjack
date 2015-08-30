@@ -6,21 +6,30 @@ class Input extends Component {
     onChange: React.PropTypes.func.isRequired,
     placeHolder: React.PropTypes.string.isRequired,
     value: React.PropTypes.string,
+    label: React.PropTypes.string,
     error: React.PropTypes.string,
     glyph: React.PropTypes.string,
-    type: React.PropTypes.string
+    password: React.PropTypes.boolean
   }
 
   render () {
-    var wrapperClass = 'field input-group';
+    var wrapperClass = 'field';
+
+    if (this.props.glyph) {
+      wrapperClass += ' input-group';
+    } else if (this.props.label) {
+      wrapperClass += ' form-group';
+    }
+
+    // Check for errors
     if (this.props.error && this.props.error.lenght > 0) {
       wrapperClass += ' has-error';
     }
 
     // Default type
     let type = 'text';
-    if (this.props.type) {
-      type = this.props.type;
+    if (this.props.password) {
+      type = 'password';
     }
 
     return (
@@ -32,6 +41,10 @@ class Input extends Component {
               <span className='input-group-addon'>
                 <i className={glyph}></i>
               </span>
+            );
+          } else if (props.label) {
+            return (
+              <label htmlFor={props.name} className='col-md-3 control-label'>{props.placeHolder}</label>
             );
           }
         })(this.props)}
