@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class TextInput extends Component {
+class SubmitBtn extends Component {
   static propTypes = {
     label: React.PropTypes.string.isRequired,
     onClick: React.PropTypes.func.isRequired
@@ -17,4 +17,4 @@ class TextInput extends Component {
   }
 }
 
-export default TextInput;
+export default SubmitBtn;
