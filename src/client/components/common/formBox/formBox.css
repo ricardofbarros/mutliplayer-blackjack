@@ -1,5 +1,6 @@
 .formBox {
   margin-top: 50px;
+  color: #303030;
 }
 
 .formBox .panel-body {
@@ -12,4 +13,10 @@
 
 .formBox .form-submit {
   margin-top: 10px;
+}
+
+.formBox .form-extra {
+  border-top: 1px solid #888;
+  padding-top: 15px;
+  margin-bottom: -10px;
 }
