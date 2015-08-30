@@ -6,7 +6,7 @@ class Input extends Component {
     onChange: React.PropTypes.func.isRequired,
     placeHolder: React.PropTypes.string.isRequired,
     value: React.PropTypes.string,
-    label: React.PropTypes.string,
+    label: React.PropTypes.boolean,
     error: React.PropTypes.string,
     glyph: React.PropTypes.string,
     password: React.PropTypes.boolean
@@ -48,13 +48,15 @@ class Input extends Component {
             );
           }
         })(this.props)}
-        <input type={type}
-          name={this.props.name}
-          className='form-control'
-          placeholder={this.props.placeHolder}
-          ref={this.props.name}
-          value={this.props.value}
-          onChange={this.props.onChange} />
+        <div className={((flag) => { if (flag) return 'col-md-9'; })(this.props.label)}>
+          <input type={type}
+            name={this.props.name}
+            className='form-control'
+            placeholder={this.props.placeHolder}
+            ref={this.props.name}
+            value={this.props.value}
+            onChange={this.props.onChange} />
+          </div>
           <div className='input'>{this.props.error}</div>
       </div>
     );
