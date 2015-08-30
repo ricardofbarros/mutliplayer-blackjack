@@ -17,9 +17,10 @@ class Input extends Component {
       wrapperClass += ' has-error';
     }
 
-    // Default value
-    if (!this.props.type) {
-      this.props.type = 'text';
+    // Default type
+    let type = 'text';
+    if (this.props.type) {
+      type = this.props.type;
     }
 
     return (
@@ -34,7 +35,7 @@ class Input extends Component {
             );
           }
         })(this.props)}
-        <input type={this.props.type}
+        <input type={type}
           name={this.props.name}
           className='form-control'
           placeholder={this.props.placeHolder}
