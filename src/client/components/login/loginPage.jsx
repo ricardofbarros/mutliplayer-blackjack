@@ -21,7 +21,7 @@ class LoginPage extends Component {
     return (
       <FormBox
         header='Sign In'
-        form={<LoginForm login={this.state.login} onChange={this.setLoginState}/>}/>
+        form={<LoginForm login={this.state.login} onChange={this.setLoginState.bind(this)}/>}/>
     );
   }
 

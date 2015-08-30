@@ -1,34 +1,41 @@
 import React, {Component} from 'react';
-import Input from '../common/input';
+import {Link} from 'react-router';
+import TextInput from '../common/textInput';
+import SubmitBtn from '../common/submitBtn';
 
 class LoginForm extends Component {
   static propTypes = {
+    login: React.PropTypes.object.isRequired,
     onChange: React.PropTypes.func.isRequired,
-    login: React.PropTypes.object.isRequired
+    onSave: React.PropTypes.func.isRequired
   }
 
   render () {
     return (
       <form className='form-horizontal'>
-        <Input
+        <TextInput
           name='username'
           onChange={this.props.onChange}
           placeHolder='Username'
           value={this.props.login.username}
           glyph='glyphicon-user' />
 
-          <Input
+          <TextInput
             name='password'
             onChange={this.props.onChange}
             placeHolder='Password'
             glyph='glyphicon-lock'
             value={this.props.login.password}
-            type='password' />
+            password={true} />
 
-          <div className='form-group form-submit'>
-            <div className='col-sm-12 controls'>
-              <a id='btn-login' href='#' className='btn btn-primary'>Login</a>
-            </div>
+          <SubmitBtn label='Login' onClick={this.props.onSave}/>
+          <div className='form-group'>
+              <div className='col-md-12 control'>
+                  <div className='form-extra'>
+                      {'Don\'t have an account? '}
+                      <Link to='sign-up'>Sign up here</Link>
+                  </div>
+              </div>
           </div>
       </form>
     );
