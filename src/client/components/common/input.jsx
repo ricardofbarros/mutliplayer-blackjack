@@ -6,29 +6,43 @@ class Input extends Component {
     onChange: React.PropTypes.func.isRequired,
     placeHolder: React.PropTypes.string.isRequired,
     value: React.PropTypes.string,
-    error: React.PropTypes.string
+    error: React.PropTypes.string,
+    glyph: React.PropTypes.string,
+    type: React.PropTypes.string
   }
 
   render () {
-    var wrapperClass = 'form-group';
+    var wrapperClass = 'field input-group';
     if (this.props.error && this.props.error.lenght > 0) {
       wrapperClass += ' has-error';
     }
 
+    // Default value
+    if (!this.props.type) {
+      this.props.type = 'text';
+    }
+
     return (
       <div className={wrapperClass}>
-        <div className='field'>
-          <input type='text'
-            name={this.props.name}
-            className='form-control'
-            placeHolder={this.props.placeHolder}
-            ref={this.props.name}
-            value={this.props.value}
-            onChange={this.props.onChange} />
-            <div className='input'>{this.props.error}</div>
-          </div>
+        {((props) => {
+          if (props.glyph) {
+            let glyph = 'glyphicon ' + props.glyph;
+            return (
+              <span className='input-group-addon'>
+                <i className={glyph}></i>
+              </span>
+            );
+          }
+        })(this.props)}
+        <input type={this.props.type}
+          name={this.props.name}
+          className='form-control'
+          placeholder={this.props.placeHolder}
+          ref={this.props.name}
+          value={this.props.value}
+          onChange={this.props.onChange} />
+          <div className='input'>{this.props.error}</div>
       </div>
-
     );
   }
 }
