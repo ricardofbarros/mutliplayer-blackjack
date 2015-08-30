@@ -2,3 +2,13 @@ body {
   background: url('~public/img/back.png');
   color: white;
 }
+
+.panel-info {
+  border-color: #696969;
+}
+
+.panel-info > .panel-heading {
+  color: #eaeaea;
+  background-color: #333333;
+  border-color: #696969;
+}
