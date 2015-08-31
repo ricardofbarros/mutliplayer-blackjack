@@ -11,7 +11,9 @@ var Table = new Schema({
   tableLimit: {
     money: Number,
     players: Number
-  }
+  },
+  numberOfDecks: Number,
+  _cards: Array
 });
 
 module.exports = mongoose.model('Table', Table);
