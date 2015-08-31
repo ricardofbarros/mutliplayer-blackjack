@@ -9,17 +9,21 @@ config.mongoDB = {
 };
 
 config.server = {
-  port: 3000
+  hostname: 'localhost',
+  port: 3000,
+  protocol: 'http:',
+  slashes: true
 };
 
 config.user = {
-  startingMoney: 10000
+  startingMoney: 10000,
+  saltHash: process.env.BJ_SALT_HASH
 };
 
 // This is the only property that
 // will be available to the client-side
 config.client = {
-
+  server: config.server
 };
 
 module.exports = config;
