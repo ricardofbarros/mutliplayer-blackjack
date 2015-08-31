@@ -1,3 +1,4 @@
+// Dependencies
 var Session = require('./models/Session');
 
 var util = {};
