@@ -1,13 +1,15 @@
+// Dependencies
 var express = require('express');
 var router = express.Router();
 var User = require('../models/User');
-var config = require('../config');
+var config = require('../../config');
+var util = require('../util');
 
 // Route mount path: /api/user
 
 // Create new user
 router.post('/', function (req, res) {
-  var payload = req.params;
+  var payload = req.body;
   var paramsKeys = Object.keys(payload);
   var paramsRequired = [
     'username',
@@ -22,7 +24,7 @@ router.post('/', function (req, res) {
     return (paramsKeys.indexOf(param) > -1);
   });
   if (!checkRequired) {
-    return res.boom.badData('Missing params.');
+    return res.boom.badData('Missing params');
   }
 
   // Sane check
@@ -30,7 +32,7 @@ router.post('/', function (req, res) {
     return res.boom.badData('Password doesn\'t match with Confirm Password');
   }
 
-  return User.findOne({ username: req.params.username }, function (err, user) {
+  return User.findOne({ username: payload.username }, function (err, user) {
     if (err) {
       return res.boom.badRequest(err);
     }
@@ -38,12 +40,12 @@ router.post('/', function (req, res) {
     // If this user already exists
     // return an error
     if (user) {
-      // TODO fire a cool http error status and msg
+      return res.boom.conflict('This user already exists');
     }
 
     user = new User({
-      username: req.params.username,
-      password: req.params.password, // TODO hash password,
+      username: payload.username,
+      password: util.hashPassword(payload.password),
       accountBalance: config.user.startingMoney
     });
 
@@ -52,7 +54,7 @@ router.post('/', function (req, res) {
         return res.boom.badRequest(err);
       }
 
-      // TODO Return happy msg with session
+      return util.answerInterface.call({res: res}, 201, 'Created user with success');
     });
   });
 });
