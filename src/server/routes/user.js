@@ -54,7 +54,9 @@ router.post('/', function (req, res) {
         return res.boom.badRequest(err);
       }
 
-      return util.answerInterface.call({res: res}, 201, 'Created user with success');
+      return res.status(201).json({
+        message: 'Created user with success'
+      });
     });
   });
 });
