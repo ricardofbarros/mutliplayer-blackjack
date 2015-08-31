@@ -9,12 +9,12 @@ module.exports = {
   target: 'web',
   cache: true,
   entry: {
-    module: path.join(srcPath, 'app.js'),
+    module: path.join(srcPath, 'client', 'main.jsx'),
     common: ['react', 'react-router', 'alt']
   },
   resolve: {
     root: srcPath,
-    extensions: ['', '.js'],
+    extensions: ['', '.js', '.jsx'],
     modulesDirectories: ['node_modules', 'src']
   },
   output: {
@@ -27,7 +27,7 @@ module.exports = {
 
   module: {
     loaders: [
-      { test: /\.js?$/, exclude: /node_modules/, loader: 'babel?cacheDirectory&stage=0' },
+      { test: /\.js.?$/, exclude: /node_modules/, loader: 'babel?cacheDirectory&stage=0' },
       { test: /\.woff.?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
       { test: /\.ttf$/, loader: 'file-loader' },
       { test: /\.eot$/, loader: 'file-loader' },
@@ -41,7 +41,7 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin('common', 'common.js'),
     new HtmlWebpackPlugin({
       inject: true,
-      template: 'src/template.html'
+      template: 'src/client/template.html'
     }),
     new webpack.ProvidePlugin({
       $: 'jquery',
