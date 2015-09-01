@@ -61,12 +61,31 @@ util.hashPassword = function (pass) {
 
 util.tableInterfaceMap = function (table) {
   return {
-    id: table.id,
+    id: table._id,
     name: table.name,
     createdDate: table.createdDate,
     sittingPlayers: table.sittingPlayers,
     tableLimit: table.tableLimit,
     numberOfDecks: table.numberOfDecks
+  };
+};
+
+util.userInterfaceMap = function (user) {
+  return {
+    id: user._id,
+    username: user.username,
+    accountBalance: user.accountBalance
+  };
+};
+
+util.sessionInterfaceMap = function (session) {
+  return {
+    userId: session.userId,
+    accessToken: session.accessToken,
+    game: {
+      tableId: session.game.tableId || null,
+      token: session.game.token || null
+    }
   };
 };
 
