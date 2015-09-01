@@ -6,11 +6,17 @@ var config = require('../config');
 var util = {};
 
 util.isAuthenticated = function (req, res, next) {
+  var accessToken;
   if (!req.query || !req.query.accessToken) {
-    return res.boom.unauthorized('Missing access token.');
+    if (!req.params || !req.params.accessToken) {
+      return res.boom.unauthorized('Missing access token.');
+    }
+    accessToken = req.params.accessToken;
+  } else {
+    accessToken = req.query.accessToken;
   }
 
-  return Session.findOne({ accessToken: req.query.accessToken }, function (err, session) {
+  return Session.findOne({ accessToken: accessToken }, function (err, session) {
     if (err) {
       return res.boom.badRequest(err);
     }
@@ -55,11 +61,17 @@ util.hashPassword = function (pass) {
 
 util.tableInterfaceMap = function (table) {
   return {
-    id: table._id,
+    id: table.id,
     name: table.name,
-    sittingPlayers: table.sittingPlayers || [],
-    tableLimit: table.tableLimit
+    createdDate: table.createdDate,
+    sittingPlayers: table.sittingPlayers,
+    tableLimit: table.tableLimit,
+    numberOfDecks: table.numberOfDecks
   };
+};
+
+util.generateDeck = function () {
+
 };
 
 module.exports = util;
