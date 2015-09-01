@@ -1,23 +1,27 @@
 // Dependencies
 var express = require('express');
 var util = require('../util');
-var Table = require('../models/Table');
+var LobbySocketFactory = require('../sockets/lobby');
+var Store = require('../store');
+var uuid = require('node-uuid');
 var router = express.Router();
+var lobbySocket = LobbySocketFactory();
 
 // Route mount path: /api/table
 
 // Get all tables available
 router.get('/', util.isAuthenticated, function (req, res) {
-  return Table.find({}, function (err, tables) {
-    if (err) {
-      return res.boom.badRequest(err);
-    }
+  var tablesKeys = Store.keys().filter(function (key) {
+    return key.substr(0, 6) === 'table:';
+  });
 
-    var tablesInterface = tables.map(util.tableInterfaceMap);
+  var tables = [];
+  tablesKeys.forEach(function (key) {
+    tables.push(util.tableInterfaceMap(Store.get(key)));
+  });
 
-    return res.status(200).json({
-      tables: tablesInterface
-    });
+  return res.status(200).json({
+    tables: tables
   });
 });
 
@@ -25,10 +29,13 @@ router.get('/', util.isAuthenticated, function (req, res) {
 router.post('/', util.isAuthenticated, function (req, res) {
   var payload = req.body;
   var paramsKeys = Object.keys(payload);
+  var session = req.params.__session;
   var paramsRequired = [
     'name',
     'moneyLimit',
-    'playersLimit'
+    'playersLimit',
+    'numberOfDecks',
+    'buyin'
   ];
 
   // Check if all params required
@@ -41,23 +48,29 @@ router.post('/', util.isAuthenticated, function (req, res) {
     return res.boom.badData('Missing params');
   }
 
-  var table = new Table({
+  var table = {
+    id: uuid.v4(),
     name: payload.name,
     createdDate: new Date(),
     tableLimit: {
       money: parseInt(payload.moneyLimit, 10),
       players: parseInt(payload.playersLimit, 10)
-    }
-  });
+    },
+    numberOfDecks: payload.numberOfDecks,
+    sittingPlayers: [{
+      userId: session.userId,
+      money: payload.buyin
+    }],
+    cards: util.generateDeck(table.numberOfDecks)
+  };
 
-  return table.save(function (err) {
-    if (err) {
-      return res.boom.badRequest(err);
-    }
+  Store.set('table:' + table.id, table);
 
-    return res.status(201).json({
-      message: 'Created table with success'
-    });
+  // Emit changes to ws
+  lobbySocket.addTable(util.tableInterfaceMap(table));
+
+  return res.status(201).json({
+    message: 'Created table with success'
   });
 });
 

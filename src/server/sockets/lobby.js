@@ -28,8 +28,8 @@ function LobbySocket (io) {
 }
 
 var apiMethods = [
-  'newTable',
-  'removeTable',
+  'addTable',
+  'deleteTable',
   'updateTable'
 ];
 

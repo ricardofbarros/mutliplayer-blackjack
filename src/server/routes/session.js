@@ -3,9 +3,11 @@ var express = require('express');
 var util = require('../util');
 var User = require('../models/User');
 var Session = require('../models/Session');
-var Table = require('../models/Table');
 var uuid = require('node-uuid');
+var LobbySocketFactory = require('../sockets/lobby');
+var Store = require('../store');
 var router = express.Router();
+var lobbySocket = LobbySocketFactory();
 
 // Route mount path: /api/session
 
@@ -76,22 +78,17 @@ router.get('/game', util.isAuthenticated, function (req, res) {
     });
   }
 
-  return Table.findById(session.game.tableId, function (err, table) {
-    if (err) {
-      return res.boom.badRequest(err);
-    }
+  var table = Store.get('table:' + session.game.tableId);
 
-    // If we didnt find a table
-    // return a 410 to inform the client
-    // this resource is no longer available
-    if (!table) {
-      return res.boom.resourceGone('Table is gone');
-    }
+  // If we didnt find a table
+  // return a 410 to inform the client
+  // this resource is no longer available
+  if (!table) {
+    return res.boom.resourceGone('Table doesn\'t exist anymore');
+  }
 
-    return res.status(200).json({
-      table: util.tableInterfaceMap(table),
-      gameToken: session.game.token
-    });
+  return res.status(200).json({
+    table: util.tableInterfaceMap(table)
   });
 });
 
@@ -121,43 +118,53 @@ router.put('/game/:tableId', util.isAuthenticated, function (req, res) {
       return res.boom.badRequest(err);
     }
 
-    return Table.update(
-      { _id: tableId },
-      {
-        $push: {
-          sittingPlayers: {
-            userId: session.userId,
-            money: payload.buyin
-          }
-        }
-      }, function (err) {
-        if (err) {
-          return res.boom.badRequest(err);
-        }
+    var table = Store.get('table:' + tableId);
+    if (!table) {
+      return res.boom.resourceGone('Table doesn\'t exist anymore');
+    }
 
-        // Send 201 and the game token
-        // so the client can auth the game websocket
-        // that he is going to create
-        return res.status(201).json({
-          gameToken: gameToken
-        });
-      }
-    );
+    // Try to add the player
+    var numberOfPlayer = table.sittingPlayers.length;
+    if (table.tableLimit.players <= numberOfPlayer) {
+      return res.boom.badRequest('Table player limit reached');
+    }
+
+    table.sittingPlayers.push(session.game);
+    Store.set('table:' + tableId, table);
+
+    // Send 201 and the game token
+    // so the client can auth the game websocket
+    // that he is going to create
+    return res.status(201).json({
+      gameToken: gameToken
+    });
   });
 });
 
 function removeUserFromTable (tableId, userId, cb) {
-  return Table.update(
-    { _id: tableId },
-    {
-      $pull: {
-        sittingPlayers: {
-          userId: userId
-        }
-      }
-    },
-    cb
-  );
+  var table = Store.get('table:' + tableId);
+
+  if (!table) {
+    return cb();
+  }
+
+  if (table.sittingPlayers.length === 1) {
+    if (table.sittingPlayers.userId !== userId) {
+      return cb(new Error('Something bad happened'));
+    }
+
+    Store.remove('table:' + tableId);
+    lobbySocket.deleteTable(table);
+  } else {
+    table.sittingPlayers.filter(function (players) {
+      return players.userId !== userId;
+    });
+
+    Store.set('table:' + tableId, table);
+    lobbySocket.updateTable(table);
+  }
+
+  return cb();
 }
 
 // Leave the current game
