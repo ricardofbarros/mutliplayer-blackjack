@@ -1,3 +1,6 @@
+// Dependencies
+var url = require('url');
+
 var config = {};
 
 config.mongoDB = {
@@ -23,7 +26,8 @@ config.user = {
 // This is the only property that
 // will be available to the client-side
 config.client = {
-  server: config.server
+  server: config.server,
+  baseUrl: url.format(config.server)
 };
 
 module.exports = config;
