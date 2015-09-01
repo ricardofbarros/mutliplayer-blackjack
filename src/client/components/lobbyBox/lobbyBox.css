@@ -1,0 +1,48 @@
+.lobby-box {
+  text-align: center;
+  padding: 12px;
+  background-color: #9E5927;
+  cursor: pointer;
+  margin: 5px 10px;
+  -webkit-transition: all 0s ease-out;
+  -moz-transition: all 0s ease-out;
+  -o-transition: all 0s ease-out;
+  -ms-transition: all 0s ease-out;
+  transition: all 0s ease-out;
+  display: block;
+  text-decoration: none;
+  text-shadow: 0px -1px 0px rgba(0,0,0,0.4);
+  border: none;
+  border-radius: 5px;
+  border-left: solid 1px #C02B21;
+  background: #DE463B;
+  -webkit-box-shadow: 0px 5px 0px 0px #C02B21;
+  box-shadow: 0px 5px 0px 0px #C02B21;
+  position: relative;
+
+  /*
+    No select
+    http://stackoverflow.com/a/4407335
+  */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.lobby-box:active {
+  top: 3px;
+  -webkit-box-shadow: 0px 2px 0px 0px #C02B21;
+  box-shadow: 0px 2px 0px 0px #C02B21;
+}
+
+.lobby-box .lobby-box-title {
+  font-size: 140%;
+  margin-bottom: 15px;
+}
+
+.lobby-box .lobby-box-info {
+  font-size: 120%;
+}
