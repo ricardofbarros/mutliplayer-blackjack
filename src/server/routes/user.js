@@ -4,6 +4,7 @@ var router = express.Router();
 var User = require('../models/User');
 var config = require('../../config');
 var util = require('../util');
+var apiMsgState = config.apiMsgState;
 
 // Route mount path: /api/user
 
@@ -28,12 +29,12 @@ router.post('/', function (req, res) {
     return (paramsKeys.indexOf(param) > -1);
   });
   if (!checkRequired) {
-    return res.boom.badData('Missing params');
+    return res.boom.badData(apiMsgState.MISSING_PARAMS);
   }
 
   // Sane check
   if (payload.password !== payload.confirmPassword) {
-    return res.boom.badData('Password doesn\'t match with Confirm Password');
+    return res.boom.badData(apiMsgState.PASSWORD_MATCH);
   }
 
   return User.findOne({ username: payload.username }, function (err, user) {
@@ -44,7 +45,7 @@ router.post('/', function (req, res) {
     // If this user already exists
     // return an error
     if (user) {
-      return res.boom.conflict('This user already exists');
+      return res.boom.conflict(apiMsgState.USER_EXISTS);
     }
 
     user = new User({
@@ -59,7 +60,7 @@ router.post('/', function (req, res) {
       }
 
       return res.status(201).json({
-        message: 'Created user with success'
+        message: apiMsgState.CREATED_USER
       });
     });
   });
