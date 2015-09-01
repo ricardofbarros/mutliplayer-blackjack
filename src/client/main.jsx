@@ -8,6 +8,7 @@ import routes from './routes';
 import ReduxStore from './store/redux';
 import '../public/css/style.css';
 import 'toastr/build/toastr.css';
+import '../public/css/icomoon/stylesheet.css';
 
 Router.run(routes, Router.HistoryLocation, (Handler, state) => {
   React.render(
