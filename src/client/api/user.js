@@ -2,7 +2,7 @@ import config from 'clientconfig';
 import axios from 'axios';
 import url from 'url';
 
-const MISSING_PARAMS = config.apiMsgState.user.MISSING_PARAMS;
+const MISSING_PARAMS = config.apiMsgState.misc.MISSING_PARAMS;
 const USER_EXISTS = config.apiMsgState.user.USER_EXISTS;
 const PASSWORD_MATCH = config.apiMsgState.user.PASSWORD_MATCH;
 
