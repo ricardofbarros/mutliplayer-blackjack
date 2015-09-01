@@ -1,27 +1,25 @@
 // Dependencies
 var express = require('express');
 var util = require('../util');
-var LobbySocketFactory = require('../sockets/lobby');
-var Store = require('../store');
+var lobbySocket = require('../sockets/lobby')();
+var gamesSocket = require('../sockets/games')();
+var Table = require('../models/Table');
 var uuid = require('node-uuid');
 var router = express.Router();
-var lobbySocket = LobbySocketFactory();
 
 // Route mount path: /api/table
 
 // Get all tables available
 router.get('/', util.isAuthenticated, function (req, res) {
-  var tablesKeys = Store.keys().filter(function (key) {
-    return key.substr(0, 6) === 'table:';
-  });
+  return Table.find({}, function (err, tables) {
+    if (err) {
+      return res.boom.badRequest(err);
+    }
 
-  var tables = [];
-  tablesKeys.forEach(function (key) {
-    tables.push(util.tableInterfaceMap(Store.get(key)));
-  });
-
-  return res.status(200).json({
-    tables: tables
+    var tablesInterface = tables.map(util.tableInterfaceMap);
+    return res.status(200).json({
+      tables: tablesInterface
+    });
   });
 });
 
@@ -48,7 +46,7 @@ router.post('/', util.isAuthenticated, function (req, res) {
     return res.boom.badData('Missing params');
   }
 
-  var table = {
+  var table = new Table({
     id: uuid.v4(),
     name: payload.name,
     createdDate: new Date(),
@@ -62,15 +60,19 @@ router.post('/', util.isAuthenticated, function (req, res) {
       money: payload.buyin
     }],
     cards: util.generateDeck(table.numberOfDecks)
-  };
+  });
 
-  Store.set('table:' + table.id, table);
+  return table.save(function (err) {
+    if (err) {
+      return res.boom.badRequest(err);
+    }
 
-  // Emit changes to ws
-  lobbySocket.addTable(util.tableInterfaceMap(table));
+    // Emit changes to ws
+    lobbySocket.addTable(util.tableInterfaceMap(table));
 
-  return res.status(201).json({
-    message: 'Created table with success'
+    return res.status(201).json({
+      message: 'Created table with success'
+    });
   });
 });
 

@@ -3,11 +3,10 @@ var express = require('express');
 var util = require('../util');
 var User = require('../models/User');
 var Session = require('../models/Session');
+var Table = require('../models/Table');
 var uuid = require('node-uuid');
-var LobbySocketFactory = require('../sockets/lobby');
-var Store = require('../store');
+var lobbySocket = require('../sockets/lobby')();
 var router = express.Router();
-var lobbySocket = LobbySocketFactory();
 
 // Route mount path: /api/session
 
@@ -78,17 +77,21 @@ router.get('/game', util.isAuthenticated, function (req, res) {
     });
   }
 
-  var table = Store.get('table:' + session.game.tableId);
+  return Table.findById(session.game.tableId, function (err, table) {
+    if (err) {
+      return res.boom.badRequest(err);
+    }
 
-  // If we didnt find a table
-  // return a 410 to inform the client
-  // this resource is no longer available
-  if (!table) {
-    return res.boom.resourceGone('Table doesn\'t exist anymore');
-  }
+    // If we didnt find a table
+    // return a 410 to inform the client
+    // this resource is no longer available
+    if (!table) {
+      return res.boom.resourceGone('Table doesn\'t exist anymore');
+    }
 
-  return res.status(200).json({
-    table: util.tableInterfaceMap(table)
+    return res.status(200).json({
+      table: util.tableInterfaceMap(table)
+    });
   });
 });
 
@@ -118,53 +121,72 @@ router.put('/game/:tableId', util.isAuthenticated, function (req, res) {
       return res.boom.badRequest(err);
     }
 
-    var table = Store.get('table:' + tableId);
-    if (!table) {
-      return res.boom.resourceGone('Table doesn\'t exist anymore');
-    }
+    return Table.findById(tableId, function (err, table) {
+      if (err) {
+        return res.boom.badRequest(err);
+      }
 
-    // Try to add the player
-    var numberOfPlayer = table.sittingPlayers.length;
-    if (table.tableLimit.players <= numberOfPlayer) {
-      return res.boom.badRequest('Table player limit reached');
-    }
+      if (!table) {
+        return res.boom.resourceGone('Table doesn\'t exist anymore');
+      }
 
-    table.sittingPlayers.push(session.game);
-    Store.set('table:' + tableId, table);
+      // Try to add the player
+      var numberOfPlayer = table.sittingPlayers.length;
+      if (table.tableLimit.players <= numberOfPlayer) {
+        return res.boom.badRequest('Table players limit reached');
+      }
 
-    // Send 201 and the game token
-    // so the client can auth the game websocket
-    // that he is going to create
-    return res.status(201).json({
-      gameToken: gameToken
+      table.sittingPlayers.push(session.game);
+      lobbySocket.updateTable(util.tableInterfaceMap(table));
+
+      // Send 201 and the game token
+      // so the client can auth the game websocket
+      // that he is going to create
+      return res.status(201).json({
+        gameToken: gameToken
+      });
     });
   });
 });
 
 function removeUserFromTable (tableId, userId, cb) {
-  var table = Store.get('table:' + tableId);
-
-  if (!table) {
-    return cb();
-  }
-
-  if (table.sittingPlayers.length === 1) {
-    if (table.sittingPlayers.userId !== userId) {
-      return cb(new Error('Something bad happened'));
+  return Table.findById(tableId, function (err, table) {
+    if (err) {
+      return cb(err);
     }
 
-    Store.remove('table:' + tableId);
-    lobbySocket.deleteTable(table);
-  } else {
+    if (!table) {
+      return cb();
+    }
+
+    if (table.sittingPlayers.length === 1) {
+      if (table.sittingPlayers.userId !== userId) {
+        return cb(new Error('Something bad happened'));
+      }
+
+      return table.remove(function (err) {
+        if (err) {
+          return cb(err);
+        }
+
+        lobbySocket.deleteTable(util.tableInterfaceMap(table));
+        return cb();
+      });
+    }
+
     table.sittingPlayers.filter(function (players) {
       return players.userId !== userId;
     });
 
-    Store.set('table:' + tableId, table);
-    lobbySocket.updateTable(table);
-  }
+    return table.save(function (err) {
+      if (err) {
+        return cb(err);
+      }
 
-  return cb();
+      lobbySocket.updateTable(util.tableInterfaceMap(table));
+      return cb();
+    });
+  });
 }
 
 // Leave the current game

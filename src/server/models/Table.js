@@ -8,7 +8,12 @@ var Table = new Schema({
     money: Number,
     players: Number
   },
-  numberOfDecks: Number
+  numberOfDecks: Number,
+  sittingPlayers: [{
+    userId: Schema.Types.ObjectId,
+    money: Number
+  }],
+  cards: Array
 });
 
 module.exports = mongoose.model('Table', Table);
