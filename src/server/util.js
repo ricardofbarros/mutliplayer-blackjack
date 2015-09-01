@@ -70,17 +70,11 @@ util.tableInterfaceMap = function (table) {
   };
 };
 
-util.userInterfaceMap = function (user) {
+util.sessionInterfaceMap = function (session, user) {
   return {
     id: user._id,
     username: user.username,
-    accountBalance: user.accountBalance
-  };
-};
-
-util.sessionInterfaceMap = function (session) {
-  return {
-    userId: session.userId,
+    accountBalance: user.accountBalance,
     accessToken: session.accessToken,
     game: {
       tableId: session.game.tableId || null,
