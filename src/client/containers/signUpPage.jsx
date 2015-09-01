@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Navigation } from 'react-router';
-import SignUpForm from './signUpForm';
-import FormBox from '../common/formBox/formBox';
-import UserApi from '../../api/user';
+import SignUpForm from '../components/signUpForm';
+import FormBox from '../components/common/formBox/formBox';
+import UserApi from '../api/user';
 import reactMixin from 'react-mixin';
 import toastr from 'toastr';
 import { connect } from 'react-redux';
@@ -14,6 +14,12 @@ class SignUpPage extends Component {
     this.state = {
       data: { username: '', password: '', confirmPassword: '' }
     };
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.session.id) {
+      this.transitionTo('app');
+    }
   }
 
   setSignUpState (e) {
@@ -47,7 +53,16 @@ class SignUpPage extends Component {
         } />
     );
   }
-
 }
 
-export default SignUpPage;
+SignUpPage.propTypes = {
+  session: React.PropTypes.object
+};
+
+function mapStateToProps (state) {
+  return {
+    session: state.session
+  };
+}
+
+export default connect(mapStateToProps)(SignUpPage);

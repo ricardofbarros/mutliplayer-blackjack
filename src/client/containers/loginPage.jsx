@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import { Navigation } from 'react-router';
-import LoginForm from './loginForm';
-import FormBox from '../common/formBox/formBox';
-import SessionApi from '../../api/session';
+import LoginForm from '../components/loginForm';
+import FormBox from '../components/common/formBox/formBox';
+import SessionApi from '../api/session';
 import reactMixin from 'react-mixin';
 import toastr from 'toastr';
-import Cookies from '../../store/cookies';
+import Cookies from '../store/cookies';
 import { connect } from 'react-redux';
 
 @reactMixin.decorate(Navigation)
@@ -15,6 +15,12 @@ class LoginPage extends Component {
     this.state = {
       login: { username: '', password: '' }
     };
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.session.id) {
+      this.transitionTo('app');
+    }
   }
 
   setLoginState (e) {
@@ -49,7 +55,17 @@ class LoginPage extends Component {
           } />
     );
   }
-
 }
 
-export default LoginPage;
+LoginPage.propTypes = {
+  session: React.PropTypes.object
+};
+
+function mapStateToProps (state) {
+  console.log(state)
+  return {
+    session: state.session
+  };
+}
+
+export default connect(mapStateToProps)(LoginPage);

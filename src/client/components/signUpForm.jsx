@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-import TextInput from '../common/textInput';
-import SubmitBtn from '../common/submitBtn';
+import TextInput from './common/textInput';
+import SubmitBtn from './common/submitBtn';
 
 class SignUpForm extends Component {
   static propTypes = {

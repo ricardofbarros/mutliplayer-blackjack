@@ -11,14 +11,15 @@ function configureStore (initialState) {
 }
 
 let initialState = {
-  user: {
-    accountBalance: '',
-    id: '',
-    username: ''
-  },
   session: {
+    id: '',
+    username: '',
+    accountBalance: '',
     accessToken: '',
-    gameToken: ''
+    game: {
+      tableId: '',
+      token: ''
+    }
   },
   tables: []
 };
