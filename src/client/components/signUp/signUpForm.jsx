@@ -11,6 +11,12 @@ class SignUpForm extends Component {
   }
 
   render () {
+    var onSave = this.props.onSave.bind(this,
+      this.props.data.username,
+      this.props.data.password,
+      this.props.data.confirmPassword
+    );
+
     return (
       <form className='form-horizontal'>
         <TextInput
@@ -28,7 +34,15 @@ class SignUpForm extends Component {
             value={this.props.data.password}
             password={true} />
 
-          <SubmitBtn label='Register' onClick={this.props.onSave}/>
+            <TextInput
+              name='confirmPassword'
+              onChange={this.props.onChange}
+              placeHolder='Confirm Password'
+              label={true}
+              value={this.props.data.confirmPassword}
+              password={true} />
+
+          <SubmitBtn label='Register' onClick={onSave}/>
           <div className='form-group'>
               <div className='col-md-12 control'>
                   <div className='form-extra'>
