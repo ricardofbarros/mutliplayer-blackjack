@@ -43,14 +43,16 @@ class SignUpPage extends Component {
 
   render () {
     return (
-      <FormBox
-        header='Sign Up'
-        form={
-          <SignUpForm
-            data={this.state.data}
-            onChange={this.setSignUpState.bind(this)}
-            onSave={this.signUp.bind(this)} />
-        } />
+      <div className='container'>
+        <FormBox
+          header='Sign Up'
+          form={
+            <SignUpForm
+              data={this.state.data}
+              onChange={this.setSignUpState.bind(this)}
+              onSave={this.signUp.bind(this)} />
+          } />
+      </div>
     );
   }
 }

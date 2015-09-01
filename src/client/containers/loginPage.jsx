@@ -45,14 +45,16 @@ class LoginPage extends Component {
 
   render () {
     return (
-      <FormBox
-        header='Sign In'
-        form={
-          <LoginForm
-            login={this.state.login}
-            onChange={this.setLoginState.bind(this)}
-            onClick={this.login.bind(this)} />
-          } />
+      <div className='container'>
+        <FormBox
+          header='Sign In'
+          form={
+            <LoginForm
+              login={this.state.login}
+              onChange={this.setLoginState.bind(this)}
+              onClick={this.login.bind(this)} />
+            } />
+      </div>
     );
   }
 }
@@ -62,7 +64,6 @@ LoginPage.propTypes = {
 };
 
 function mapStateToProps (state) {
-  console.log(state)
   return {
     session: state.session
   };
