@@ -5,6 +5,7 @@ import FormBox from '../common/formBox/formBox';
 import SessionApi from '../../api/session';
 import reactMixin from 'react-mixin';
 import toastr from 'toastr';
+import Cookies from '../../store/cookies';
 
 @reactMixin.decorate(Navigation)
 class LoginPage extends Component {
@@ -30,6 +31,7 @@ class LoginPage extends Component {
       toastr.error(result.data.message);
     } else {
       toastr.success(result.data.message);
+      Cookies.set('accessToken', result.data.accessToken);
       this.transitionTo('app');
     }
   }

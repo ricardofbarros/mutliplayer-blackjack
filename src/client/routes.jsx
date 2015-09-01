@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route, DefaultRoute} from 'react-router';
 
-import App from './app';
+import App from './containers/app';
 import LoginPage from './components/login/loginPage';
 import SignUpPage from './components/signUp/signUpPage';
 
