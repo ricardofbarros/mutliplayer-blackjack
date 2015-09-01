@@ -6,6 +6,7 @@ import SessionApi from '../../api/session';
 import reactMixin from 'react-mixin';
 import toastr from 'toastr';
 import Cookies from '../../store/cookies';
+import { connect } from 'react-redux';
 
 @reactMixin.decorate(Navigation)
 class LoginPage extends Component {

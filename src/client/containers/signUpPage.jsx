@@ -5,6 +5,7 @@ import FormBox from '../common/formBox/formBox';
 import UserApi from '../../api/user';
 import reactMixin from 'react-mixin';
 import toastr from 'toastr';
+import { connect } from 'react-redux';
 
 @reactMixin.decorate(Navigation)
 class SignUpPage extends Component {
