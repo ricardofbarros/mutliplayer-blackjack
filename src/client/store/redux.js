@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
-import reducers from './reducers';
+import reducers from '../reducers';
 import promiseMiddleware from 'redux-promise';
 
 const createStoreWithMiddleware = applyMiddleware(
@@ -10,6 +10,19 @@ function configureStore (initialState) {
   return createStoreWithMiddleware(reducers, initialState);
 }
 
-const store = configureStore({});
+let initialState = {
+  user: {
+    accountBalance: '',
+    id: '',
+    username: ''
+  },
+  session: {
+    accessToken: '',
+    gameToken: ''
+  },
+  tables: []
+};
+
+const store = configureStore(initialState);
 
 export default store;
