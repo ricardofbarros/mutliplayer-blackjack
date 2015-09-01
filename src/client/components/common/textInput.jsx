@@ -6,10 +6,10 @@ class Input extends Component {
     onChange: React.PropTypes.func.isRequired,
     placeHolder: React.PropTypes.string.isRequired,
     value: React.PropTypes.string,
-    label: React.PropTypes.boolean,
+    label: React.PropTypes.bool,
     error: React.PropTypes.string,
     glyph: React.PropTypes.string,
-    password: React.PropTypes.boolean
+    password: React.PropTypes.bool
   }
 
   render () {
