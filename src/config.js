@@ -19,11 +19,17 @@ config.server = {
 };
 
 config.apiMsgState = {
+  misc: {
+    MISSING_PARAMS: 'Missing params'
+  },
   user: {
-    MISSING_PARAMS: 'MISSING_PARAMS',
-    USER_EXISTS: 'USER_EXISTS',
-    PASSWORD_MATCH: 'PASSWORD_MATCH',
-    CREATED_USER: 'CREATED_USER'
+    USER_EXISTS: 'User already exists',
+    PASSWORD_MATCH: 'Passwords doesn\'t match',
+    CREATED_USER: 'User created with success!'
+  },
+  session: {
+    USER_NOT_FOUND: 'User not found',
+    LOGIN_SUCCESS: 'Logging in..'
   }
 };
 
