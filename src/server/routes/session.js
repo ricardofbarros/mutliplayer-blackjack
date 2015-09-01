@@ -68,8 +68,7 @@ router.get('/user', util.isAuthenticated, function (req, res) {
     // User isn't playing currently
     if (!session.game || !session.game.tableId || !session.game.token) {
       return res.status(200).json({
-        session: util.sessionInterfaceMap(session),
-        user: util.userInterfaceMap(user)
+        session: util.sessionInterfaceMap(session, user)
       });
     }
 
@@ -86,9 +85,7 @@ router.get('/user', util.isAuthenticated, function (req, res) {
       }
 
       return res.status(200).json({
-        session: util.sessionInterfaceMap(session),
-        user: util.userInterfaceMap(user),
-        tables: util.tableInterfaceMap(table)
+        session: util.sessionInterfaceMap(session, user)
       });
     });
   });
