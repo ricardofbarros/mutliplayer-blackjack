@@ -7,10 +7,15 @@ class LoginForm extends Component {
   static propTypes = {
     login: React.PropTypes.object.isRequired,
     onChange: React.PropTypes.func.isRequired,
-    onSave: React.PropTypes.func.isRequired
+    onClick: React.PropTypes.func.isRequired
   }
 
   render () {
+    var onClick = this.props.onClick.bind(null,
+      this.props.login.username,
+      this.props.login.password
+    );
+
     return (
       <form className='form-horizontal'>
         <TextInput
@@ -28,7 +33,7 @@ class LoginForm extends Component {
             value={this.props.login.password}
             password={true} />
 
-          <SubmitBtn label='Login' onClick={this.props.onSave}/>
+          <SubmitBtn label='Login' onClick={onClick}/>
           <div className='form-group'>
               <div className='col-md-12 control'>
                   <div className='form-extra'>
