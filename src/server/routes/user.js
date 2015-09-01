@@ -4,7 +4,12 @@ var router = express.Router();
 var User = require('../models/User');
 var config = require('../../config');
 var util = require('../util');
-var apiMsgState = config.apiMsgState;
+
+// Constants
+var MISSING_PARAMS = config.apiMsgState.misc.MISSING_PARAMS;
+var USER_EXISTS = config.apiMsgState.user.USER_EXISTS;
+var PASSWORD_MATCH = config.apiMsgState.user.PASSWORD_MATCH;
+var CREATED_USER = config.apiMsgState.user.CREATED_USER;
 
 // Route mount path: /api/user
 
@@ -29,12 +34,12 @@ router.post('/', function (req, res) {
     return (paramsKeys.indexOf(param) > -1);
   });
   if (!checkRequired) {
-    return res.boom.badData(apiMsgState.MISSING_PARAMS);
+    return res.boom.badData(MISSING_PARAMS);
   }
 
   // Sane check
   if (payload.password !== payload.confirmPassword) {
-    return res.boom.badData(apiMsgState.PASSWORD_MATCH);
+    return res.boom.badData(PASSWORD_MATCH);
   }
 
   return User.findOne({ username: payload.username }, function (err, user) {
@@ -45,7 +50,7 @@ router.post('/', function (req, res) {
     // If this user already exists
     // return an error
     if (user) {
-      return res.boom.conflict(apiMsgState.USER_EXISTS);
+      return res.boom.conflict(USER_EXISTS);
     }
 
     user = new User({
@@ -60,7 +65,7 @@ router.post('/', function (req, res) {
       }
 
       return res.status(201).json({
-        message: apiMsgState.CREATED_USER
+        message: CREATED_USER
       });
     });
   });
