@@ -18,7 +18,7 @@ module.exports = {
     modulesDirectories: ['node_modules', 'src']
   },
   output: {
-    path: path.join(__dirname, 'tmp'),
+    path: path.join(__dirname, 'build'),
     publicPath: '',
     filename: '[name].js',
     library: ['Example', '[name]'],
