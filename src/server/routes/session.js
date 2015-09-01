@@ -5,8 +5,14 @@ var User = require('../models/User');
 var Session = require('../models/Session');
 var Table = require('../models/Table');
 var uuid = require('node-uuid');
+var config = require('../../config');
 var lobbySocket = require('../sockets/lobby')();
 var router = express.Router();
+
+// Constants
+var MISSING_PARAMS = config.apiMsgState.misc.MISSING_PARAMS;
+var USER_NOT_FOUND = config.apiMsgState.session.USER_NOT_FOUND;
+var LOGIN_SUCCESS = config.apiMsgState.session.LOGIN_SUCCESS;
 
 // Route mount path: /api/session
 
@@ -15,7 +21,7 @@ router.post('/', function (req, res) {
   var payload = req.body;
 
   if (!payload.username || !payload.password) {
-    return res.boom.badData('Missing params');
+    return res.boom.badData(MISSING_PARAMS);
   }
 
   return User.findOne({
@@ -27,7 +33,7 @@ router.post('/', function (req, res) {
     }
 
     if (!user) {
-      return res.boom.badData('User not found');
+      return res.boom.badData(USER_NOT_FOUND);
     }
 
     var accessToken = uuid.v4();
@@ -42,7 +48,8 @@ router.post('/', function (req, res) {
       }
 
       return res.status(201).json({
-        accessToken: accessToken
+        accessToken: accessToken,
+        message: LOGIN_SUCCESS
       });
     });
   });
@@ -51,46 +58,38 @@ router.post('/', function (req, res) {
 // Get info about himself
 router.get('/user', util.isAuthenticated, function (req, res) {
   var userId = req.params.__session.userId;
+  var session = req.params.__session;
 
   return User.findById(userId, function (err, user) {
     if (err || !user) {
       return res.boom.badRequest(err || 'Something went wrong.');
     }
 
-    return res.status(200).json({
-      id: user._id,
-      username: user.username,
-      accountBalance: user.accountBalance
-    });
-  });
-});
-
-// Get info of the current game
-router.get('/game', util.isAuthenticated, function (req, res) {
-  var session = req.params.__session;
-
-  // User isn't playing currently
-  if (!session.game || !session.game.tableId || !session.game.token) {
-    return res.status(200).json({
-      table: null,
-      gameToken: null
-    });
-  }
-
-  return Table.findById(session.game.tableId, function (err, table) {
-    if (err) {
-      return res.boom.badRequest(err);
+    // User isn't playing currently
+    if (!session.game || !session.game.tableId || !session.game.token) {
+      return res.status(200).json({
+        session: util.sessionInterfaceMap(session),
+        user: util.userInterfaceMap(user)
+      });
     }
 
-    // If we didnt find a table
-    // return a 410 to inform the client
-    // this resource is no longer available
-    if (!table) {
-      return res.boom.resourceGone('Table doesn\'t exist anymore');
-    }
+    return Table.findById(session.game.tableId, function (err, table) {
+      if (err) {
+        return res.boom.badRequest(err);
+      }
 
-    return res.status(200).json({
-      table: util.tableInterfaceMap(table)
+      // If we didnt find a table
+      // return a 410 to inform the client
+      // this resource is no longer available
+      if (!table) {
+        return res.boom.resourceGone('Table doesn\'t exist anymore');
+      }
+
+      return res.status(200).json({
+        session: util.sessionInterfaceMap(session),
+        user: util.userInterfaceMap(user),
+        tables: util.tableInterfaceMap(table)
+      });
     });
   });
 });
