@@ -40,6 +40,10 @@ router.post('/', util.isAuthenticated, function (req, res) {
   // are in the payload
   // If not return an error
   var checkRequired = paramsRequired.every(function (param) {
+    if (!payload[param]) {
+      return false;
+    }
+
     return (paramsKeys.indexOf(param) > -1);
   });
   if (!checkRequired) {
