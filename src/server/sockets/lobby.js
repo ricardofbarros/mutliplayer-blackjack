@@ -14,6 +14,8 @@ function LobbySocket (io) {
       data = data || {};
       data.accessToken = data.accessToken || 'fail';
       return Session.find({ accessToken: data.accessToken }, function (err, session) {
+        session = session[0] || false;
+
         if (err || !session) {
           socket.disconnect();
           return;
