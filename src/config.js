@@ -34,7 +34,8 @@ config.apiMsgState = {
   session: {
     USER_NOT_FOUND: 'User not found',
     LOGIN_SUCCESS: 'Logging in..',
-    ALREADY_PLAYING: 'You\'re already playing'
+    ALREADY_PLAYING: 'You\'re already playing',
+    TOKEN_EXPIRED: 'You\'re token has expired'
   },
   table: {
     INVALID_NAME_FIELD: 'Invalid table name, please use alphanumeric and underscore characters only',
