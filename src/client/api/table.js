@@ -3,7 +3,7 @@ import axios from 'axios';
 import url from 'url';
 import apiCallWrapper from './common/apiCallWrapper';
 
-async function createNew (accessToken, name, moneyLimit, playersLimit, numberOfDecks, buyin) {
+async function createNew (accessToken, name, maxBuyIn, playersLimit, numberOfDecks, buyin) {
   let promise = axios.post.bind(axios, url.resolve(config.baseUrl, '/api/table'), ...arguments);
 
   return await apiCallWrapper(promise);
