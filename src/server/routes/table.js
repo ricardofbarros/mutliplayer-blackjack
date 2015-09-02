@@ -41,7 +41,7 @@ router.post('/', util.isAuthenticated, function (req, res) {
     name: payload.name,
     createdDate: new Date(),
     tableLimit: {
-      maxBuyIn: parseInt(payload.moneyLimit, 10),
+      maxBuyIn: parseInt(payload.maxBuyIn, 10),
       players: parseInt(payload.playersLimit, 10)
     },
     numberOfDecks: payload.numberOfDecks,
