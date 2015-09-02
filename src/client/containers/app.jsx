@@ -9,6 +9,12 @@ import Spinner from '../components/common/spinner';
 
 @reactMixin.decorate(Navigation)
 class App extends Component {
+  static propTypes = {
+    getUserInfo: React.PropTypes.func.isRequired,
+    logout: React.PropTypes.func.isRequired,
+    session: React.PropTypes.object
+  }
+
   constructor () {
     super();
 
@@ -18,23 +24,32 @@ class App extends Component {
   }
 
   async componentDidMount () {
-    let self = this;
     if (this.state.accessToken) {
       let result = await this.props.getUserInfo(this.state.accessToken);
-
-      // Unauthorized
-      if (result.error) {
-        Cookies.expire('accessToken');
-        setTimeout(function () {
-          self.transitionTo('login');
-        }, 500);
-      }
 
       // User is currently playing a game
       if (result.payload.table) {
         this.transitionTo('game');
       }
     }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    let self = this;
+
+    // Unauthorized or logged out
+    if (nextProps.sessionExpired) {
+      Cookies.expire('accessToken');
+      self.state.accessToken = null;
+      setTimeout(function () {
+        self.transitionTo('login');
+      }, 500);
+    }
+  }
+
+  logout (e) {
+    e.preventDefault();
+    this.props.logout(this.state.accessToken);
   }
 
   render () {
@@ -59,7 +74,13 @@ class App extends Component {
       <div>
         {(() => {
           if (session.id) {
-            return <Header name={session.username} money={session.accountBalance}/>;
+            return (
+              <Header
+                name={session.username}
+                money={session.accountBalance}
+                onClick={this.logout.bind(this)}
+              />
+            );
           }
         })()}
         <RouteHandler/>
@@ -68,14 +89,10 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
-  getUserInfo: React.PropTypes.func.isRequired,
-  session: React.PropTypes.object
-};
-
 function mapStateToProps (state) {
   return {
-    session: state.session
+    session: state.session,
+    sessionExpired: state.sessionExpired
   };
 }
 
