@@ -45,6 +45,8 @@ validation.user = function (apiMsgState, payload) {
   if (!re.test(payload.username)) {
     return INVALID_USER_FIELD;
   }
+
+  re = new RegExp(alphanumeric, 'g');
   if (!re.test(payload.password)) {
     return INVALID_PASS_FIELD;
   }
