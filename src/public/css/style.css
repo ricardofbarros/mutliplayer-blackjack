@@ -12,3 +12,9 @@ body {
   background-color: #333333;
   border-color: #696969;
 }
+
+.navbar-nav li {
+ font-size: 130%;
+ line-height: 50px;
+ padding-left: 10px;
+}
