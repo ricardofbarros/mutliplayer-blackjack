@@ -21,7 +21,7 @@ let initialState = {
       token: ''
     }
   },
-  tables: []
+  tables: new Map()
 };
 
 const store = configureStore(initialState);
