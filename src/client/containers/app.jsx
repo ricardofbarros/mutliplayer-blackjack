@@ -29,7 +29,7 @@ class App extends Component {
   }
 
   render () {
-    var session = this.props.session;
+    let session = this.props.session;
 
     // User is logged in but the data isn't
     // ready yet, return a loader/spinner

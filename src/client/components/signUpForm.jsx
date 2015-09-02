@@ -11,7 +11,7 @@ class SignUpForm extends Component {
   }
 
   render () {
-    var onSave = this.props.onSave.bind(null,
+    let onSave = this.props.onSave.bind(null,
       this.props.data.username,
       this.props.data.password,
       this.props.data.confirmPassword

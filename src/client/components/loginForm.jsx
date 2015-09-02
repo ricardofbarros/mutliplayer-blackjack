@@ -11,7 +11,7 @@ class LoginForm extends Component {
   }
 
   render () {
-    var onClick = this.props.onClick.bind(null,
+    let onClick = this.props.onClick.bind(null,
       this.props.login.username,
       this.props.login.password
     );

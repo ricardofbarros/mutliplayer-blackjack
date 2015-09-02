@@ -13,7 +13,7 @@ class Input extends Component {
   }
 
   render () {
-    var wrapperClass = 'field';
+    let wrapperClass = 'field';
 
     if (this.props.glyph) {
       wrapperClass += ' input-group';

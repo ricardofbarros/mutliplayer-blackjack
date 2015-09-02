@@ -13,7 +13,7 @@ import toastr from 'toastr';
 @reactMixin.decorate(Navigation)
 class LobbyPage extends Component {
   componentDidMount () {
-    var self = this;
+    let self = this;
     if (!self.props.session.id) {
       self.transitionTo('login');
       return;
@@ -65,7 +65,7 @@ class LobbyPage extends Component {
   }
 
   render () {
-    var tables = this.props.tables;
+    let tables = this.props.tables;
 
     return (
       <div className='container'>

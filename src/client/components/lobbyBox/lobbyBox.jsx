@@ -18,7 +18,7 @@ class LobbyBox extends Component {
   }
 
   render () {
-    var table = this.props.box;
+    let table = this.props.box;
 
     return (
       <div id={table.id} key={this.props.key} className='col-md-3 col-md-push-1 lobby-box no-select'>

@@ -7,7 +7,7 @@ class Header extends Component {
   }
 
   render () {
-    var money = this.props.money + '.';
+    let money = this.props.money + '.';
     money = money.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
     money = money.substring(0, money.length - 1);
 
