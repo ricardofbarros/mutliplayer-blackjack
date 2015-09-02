@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Navigation } from 'react-router';
 import LoginForm from '../components/loginForm';
 import FormBox from '../components/common/formBox/formBox';
-import SessionApi from '../api/session';
+import SessionActions from '../actions/session';
 import reactMixin from 'react-mixin';
 import toastr from 'toastr';
 import Cookies from '../store/cookies';
@@ -17,8 +17,8 @@ class LoginPage extends Component {
     };
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.session.id) {
+  componentDidMount () {
+    if (this.props.session.id) {
       this.transitionTo('app');
     }
   }
@@ -32,14 +32,14 @@ class LoginPage extends Component {
 
   async login (user, pass, e) {
     e.preventDefault();
-    let result = await SessionApi.signIn(user, pass);
+    let result = await this.props.login(user, pass);
 
     if (result.error) {
-      toastr.error(result.data.message);
+      toastr.error(result.payload.message);
     } else {
-      toastr.success(result.data.message);
-      Cookies.set('accessToken', result.data.accessToken);
-      this.transitionTo('app');
+      Cookies.set('accessToken', result.payload.accessToken);
+      toastr.success(result.payload.message);
+      this.props.getUserInfo(result.payload.accessToken);
     }
   }
 
@@ -60,7 +60,9 @@ class LoginPage extends Component {
 }
 
 LoginPage.propTypes = {
-  session: React.PropTypes.object
+  session: React.PropTypes.object,
+  login: React.PropTypes.func,
+  getUserInfo: React.PropTypes.func
 };
 
 function mapStateToProps (state) {
@@ -69,4 +71,7 @@ function mapStateToProps (state) {
   };
 }
 
-export default connect(mapStateToProps)(LoginPage);
+export default connect(
+  mapStateToProps,
+  {...SessionActions}
+)(LoginPage);

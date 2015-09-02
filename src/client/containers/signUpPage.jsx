@@ -16,8 +16,8 @@ class SignUpPage extends Component {
     };
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.session.id) {
+  componentDidMount () {
+    if (this.props.session.id) {
       this.transitionTo('app');
     }
   }
