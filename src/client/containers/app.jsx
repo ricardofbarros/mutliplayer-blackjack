@@ -57,10 +57,6 @@ class App extends Component {
       </div>
     );
   }
-
-  renderAsync () {
-
-  }
 }
 
 App.propTypes = {
