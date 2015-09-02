@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 class Header extends Component {
   static propTypes = {
     name: React.PropTypes.string.isRequired,
-    money: React.PropTypes.number.isRequired
+    money: React.PropTypes.number.isRequired,
+    onClick: React.PropTypes.func.isRequired
   }
 
   render () {
@@ -23,6 +24,10 @@ class Header extends Component {
                 {money}
                 <span className='glyphicon glyphicon-euro'></span>
               </b>
+            </li>
+            <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</li>
+            <li>
+              <button type='button' className='btn btn-danger' onClick={this.props.onClick}>Logout</button>
             </li>
           </ul>
         </div>
