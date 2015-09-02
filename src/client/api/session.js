@@ -2,10 +2,11 @@ import {config} from '../store/cookies';
 import axios from 'axios';
 import url from 'url';
 import apiCallWrapper from './common/apiCallWrapper';
+import TOKEN_EXPIRED from './common/tokenExpired';
 
 const MISSING_PARAMS = config.apiMsgState.misc.MISSING_PARAMS;
 const USER_NOT_FOUND = config.apiMsgState.session.USER_NOT_FOUND;
-const TOKEN_EXPIRED = config.apiMsgState.session.TOKEN_EXPIRED;
+
 
 async function signIn (username, password) {
   let promise = axios.post.bind(axios, url.resolve(config.baseUrl, '/api/session'), {
@@ -23,7 +24,7 @@ async function signOut (accessToken) {
     }
   });
 
-  return await apiCallWrapper(promise);
+  return await apiCallWrapper(promise, [TOKEN_EXPIRED]);
 }
 
 async function getUserInfo (accessToken) {
@@ -43,7 +44,7 @@ async function joinGame (accessToken, tableId) {
     }
   });
 
-  return await apiCallWrapper(promise);
+  return await apiCallWrapper(promise, [TOKEN_EXPIRED]);
 }
 
 async function leaveGame (accessToken) {
@@ -53,7 +54,7 @@ async function leaveGame (accessToken) {
     }
   });
 
-  return await apiCallWrapper(promise);
+  return await apiCallWrapper(promise, [TOKEN_EXPIRED]);
 }
 
 export default { signIn, signOut, getUserInfo, joinGame, leaveGame };
