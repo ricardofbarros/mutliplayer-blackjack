@@ -5,7 +5,7 @@ var Table = new Schema({
   name: String,
   createdDate: Date,
   tableLimit: {
-    money: Number,
+    maxBuyIn: Number,
     players: Number
   },
   numberOfDecks: Number,
