@@ -44,5 +44,7 @@
 }
 
 .lobby-box .lobby-box-info {
-  font-size: 120%;
+  font-size: 105%;
+  padding: 0;
+  margin: 0;
 }

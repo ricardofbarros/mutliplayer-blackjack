@@ -22,13 +22,17 @@ class LobbyBox extends Component {
     return (
       <div id={table.id} className='col-md-3 col-md-push-1 lobby-box no-select'>
         <div className='lobby-box-title col-md-12'>{table.name}</div>
-        <div className='col-md-6 lobby-box-info'>
+        <div className='col-md-2 col-md-push-1 lobby-box-info'>
           {table.numberOfDecks}
           <span className='icomoon icomoon-stack'></span>
         </div>
-        <div className='col-md-6 lobby-box-info'>
+        <div className='col-md-3 col-md-push-2 lobby-box-info'>
           {table.sittingPlayers.length} / {table.tableLimit.players}&nbsp;
           <span className='glyphicon glyphicon-user' aria-hidden='true'></span>
+        </div>
+        <div className='col-md-5 col-md-push-2 lobby-box-info'>
+          {table.tableLimit.money}&nbsp;
+          <span className='glyphicon glyphicon-euro' aria-hidden='true'></span>
         </div>
       </div>
     );
