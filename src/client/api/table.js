@@ -1,17 +1,22 @@
-import {client as config} from 'config';
+import {config} from '../store/cookies';
 import axios from 'axios';
 import url from 'url';
+import apiCallWrapper from './common/apiCallWrapper';
 
-function createNew (accessToken, name, moneyLimit, playersLimit, numberOfDecks, buyin) {
-  return axios.post(url.resolve(config.baseUrl, '/api/table'), ...arguments);
+async function createNew (accessToken, name, moneyLimit, playersLimit, numberOfDecks, buyin) {
+  let promise = axios.post.bind(axios, url.resolve(config.baseUrl, '/api/table'), ...arguments);
+
+  return await apiCallWrapper(promise);
 }
 
-function getAll (accessToken) {
-  return axios.get(url.resolve(config.baseUrl, '/api/table'), {
+async function getAll (accessToken) {
+  let promise = axios.get.bind(axios, url.resolve(config.baseUrl, '/api/table'), {
     params: {
       accessToken
     }
   });
+
+  return await apiCallWrapper(promise);
 }
 
 export default { createNew, getAll };

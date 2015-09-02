@@ -1,4 +1,4 @@
-import {config} from '../cookies';
+import {config} from '../store/cookies';
 import axios from 'axios';
 import url from 'url';
 import apiCallWrapper from './common/apiCallWrapper';
