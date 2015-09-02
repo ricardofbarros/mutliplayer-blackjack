@@ -78,19 +78,19 @@ validation.table = function (apiMsgState, payload) {
     return INVALID_NAME_FIELD;
   }
 
-  if (payload.maxBuyIn < 1 || payload.maxBuyIn > 1000) {
+  if (parseInt(payload.maxBuyIn, 10) < 1 || parseInt(payload.maxBuyIn, 10) > 1000) {
     return MAX_BUYIN;
   }
 
-  if (payload.buyin > payload.maxBuyIn) {
+  if (parseInt(payload.buyin, 10) > parseInt(payload.maxBuyIn, 10)) {
     return BUYIN;
   }
 
-  if (payload.numberOfDecks < 1 || payload.numberOfDecks > 6) {
+  if (parseInt(payload.numberOfDecks, 10) < 1 || parseInt(payload.numberOfDecks, 10) > 6) {
     return NUMBER_DECKS;
   }
 
-  if (payload.playersLimit < 1 || payload.playersLimit > 4) {
+  if (parseInt(payload.playersLimit, 10) < 1 || parseInt(payload.playersLimit, 10) > 4) {
     return PLAYERS_LIMIT;
   }
 
