@@ -9,6 +9,7 @@ import url from 'url';
 import SessionActions from '../actions/session';
 import TablesAction from '../actions/tables';
 import toastr from 'toastr';
+import { tables as tableValidation } from '../../common/validation';
 
 @reactMixin.decorate(Navigation)
 class LobbyPage extends Component {
@@ -30,9 +31,7 @@ class LobbyPage extends Component {
       });
 
       socket.on('addTable', (data) => {
-        console.log('NEW TABLE! NEW TABLE!', data)
         self.props.addTable(data);
-        console.log('adsdsd')
       });
 
       socket.on('removeTable', (data) => {
@@ -55,6 +54,13 @@ class LobbyPage extends Component {
 
   async createNewTable (table, e) {
     e.preventDefault();
+
+    // Run common validation
+    let isNotValid = tableValidation(config.apiMsgState, table);
+    if (isNotValid) {
+      return toastr.error(isNotValid);
+    }
+
     let result = await this.props.createNewTable(table);
 
     if (result.error) {
@@ -70,7 +76,7 @@ class LobbyPage extends Component {
     return (
       <div className='container'>
         <div className='col-md-push-9 col-md-3'>
-          <button type='button' className='btn btn-danger btn-lg' onClick={this.createNewTable}>
+          <button type='button' className='btn btn-success btn-lg' onClick={this.createNewTable}>
             <span className='glyphicon glyphicon-plus' aria-hidden='true'></span> New Table
           </button>
         </div>
