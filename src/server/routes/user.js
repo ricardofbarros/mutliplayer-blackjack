@@ -17,9 +17,9 @@ router.post('/', function (req, res) {
   var payload = req.body;
 
   // Run common validation
-  var valid = userValidation(config.apiMsgState, payload);
-  if (!valid) {
-    return res.boom.badData(valid);
+  var isNotValid = userValidation(config.apiMsgState, payload);
+  if (isNotValid) {
+    return res.boom.badData(isNotValid);
   }
 
   return User.findOne({ username: payload.username }, function (err, user) {

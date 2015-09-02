@@ -31,9 +31,9 @@ router.post('/', util.isAuthenticated, function (req, res) {
   var session = req.params.__session;
 
   // Run common validation
-  var valid = tableValidation(config.apiMsgState, payload);
-  if (!valid) {
-    return res.boom.badData(valid);
+  var isNotValid = tableValidation(config.apiMsgState, payload);
+  if (isNotValid) {
+    return res.boom.badData(isNotValid);
   }
 
   var table = new Table({
