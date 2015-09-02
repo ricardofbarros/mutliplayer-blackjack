@@ -1,6 +1,17 @@
-import { GET_USER_INFO } from '../actions/session';
+import { GET_USER_INFO, LOGOUT } from '../actions/session';
 
-export default function session (state = 0, action) {
+export const initialState = {
+  id: '',
+  username: '',
+  accountBalance: '',
+  accessToken: '',
+  game: {
+    tableId: '',
+    token: ''
+  }
+};
+
+export default function session (state = initialState, action) {
   if (action && action.error) {
     return state;
   }
@@ -8,6 +19,8 @@ export default function session (state = 0, action) {
   switch (action.type) {
     case GET_USER_INFO:
       return Object.assign({}, state, action.payload);
+    case LOGOUT:
+      return initialState;
     default:
       return state;
   }

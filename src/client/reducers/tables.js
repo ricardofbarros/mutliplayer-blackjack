@@ -1,7 +1,9 @@
 import { APP_HYDRATE_TABLES, ADD_TABLE, REMOVE_TABLE, UPDATE_TABLE } from '../actions/tables';
 import { OrderedMap } from 'immutable';
 
-export default function tables (state = 0, action) {
+export const initialState = OrderedMap();
+
+export default function tables (state = initialState, action) {
   if (action && action.error) {
     return state;
   }
