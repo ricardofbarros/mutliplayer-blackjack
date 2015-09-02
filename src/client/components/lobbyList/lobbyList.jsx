@@ -7,11 +7,11 @@ class LobbyList extends Component {
     tables: React.PropTypes.array
   }
 
-  drawColumn (boxes) {
+  drawColumn (i, boxes) {
     return (
-      <div className='col-md-12 lobby-col'>
+      <div key={i} className='col-md-12 lobby-col'>
         {boxes.map((box) => {
-          return <LobbyBox box={box} />;
+          return <LobbyBox key={box.id} box={box} />;
         })}
       </div>
     );
@@ -30,11 +30,11 @@ class LobbyList extends Component {
       // if next element is the last onSave
       // print what we have
       if (i + 1 === tables.length) {
-        columns.push(this.drawColumn(rows));
+        columns.push(this.drawColumn(i, rows));
       }
 
       if (i % 3 === 2) {
-        columns.push(this.drawColumn(rows));
+        columns.push(this.drawColumn(i, rows));
 
         c = 0;
         rows = [];

@@ -3,10 +3,11 @@ import './lobbyBox.css';
 
 class LobbyBox extends Component {
   static propTypes = {
+    key: React.PropTypes.string,
     box: React.PropTypes.shape({
       id: React.PropTypes.string,
       name: React.PropTypes.string,
-      createdDate: React.PropTypes.object,
+      createdDate: React.PropTypes.string,
       sittingPlayers: React.PropTypes.array,
       tableLimit: React.PropTypes.shape({
         players: React.PropTypes.number,
@@ -20,7 +21,7 @@ class LobbyBox extends Component {
     var table = this.props.box;
 
     return (
-      <div id={table.id} className='col-md-3 col-md-push-1 lobby-box no-select'>
+      <div id={table.id} key={this.props.key} className='col-md-3 col-md-push-1 lobby-box no-select'>
         <div className='lobby-box-title col-md-12'>{table.name}</div>
         <div className='col-md-2 col-md-push-1 lobby-box-info'>
           {table.numberOfDecks}
