@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import reducers from '../reducers';
 import promiseMiddleware from 'redux-promise';
-import Immutable from 'immutable';
+import { OrderedMap } from 'immutable';
 
 const createStoreWithMiddleware = applyMiddleware(
   promiseMiddleware,
@@ -22,7 +22,7 @@ let initialState = {
       token: ''
     }
   },
-  tables: new Immutable.Map()
+  tables: OrderedMap()
 };
 
 const store = configureStore(initialState);
