@@ -11,15 +11,10 @@ class LobbyList extends Component {
     return (
       <div className='col-md-12 lobby-col'>
         {boxes.map((box) => {
-          console.log(box)
           return <LobbyBox box={box} />;
         })}
       </div>
     );
-  }
-
-  drawRow (table) {
-
   }
 
   render () {
