@@ -10,6 +10,7 @@ import SessionActions from '../actions/session';
 import TablesAction from '../actions/tables';
 import toastr from 'toastr';
 import { tables as tableValidation } from '../../common/validation';
+import LobbyTableModal from '../components/lobbyTableModal/lobbyTableModal';
 
 @reactMixin.decorate(Navigation)
 class LobbyPage extends Component {
@@ -76,10 +77,11 @@ class LobbyPage extends Component {
     return (
       <div className='container'>
         <div className='col-md-push-9 col-md-3'>
-          <button type='button' className='btn btn-success btn-lg' onClick={this.createNewTable}>
+          <button type='button' className='btn btn-success btn-lg' data-toggle='modal' data-target='#lobbyTableModal'>
             <span className='glyphicon glyphicon-plus' aria-hidden='true'></span> New Table
           </button>
         </div>
+        <LobbyTableModal onSave={this.createNewTable.bind(this)} />
         <LobbyList tables={tables}/>
       </div>
     );
