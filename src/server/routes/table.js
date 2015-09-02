@@ -4,7 +4,9 @@ var util = require('../util');
 var lobbySocket = require('../sockets/lobby')();
 var gamesSocket = require('../sockets/games')();
 var Table = require('../models/Table');
+var config = require('../../config');
 var uuid = require('node-uuid');
+var tableValidation = require('../../common/validation').table;
 var router = express.Router();
 
 // Route mount path: /api/table
@@ -26,28 +28,12 @@ router.get('/', util.isAuthenticated, function (req, res) {
 // Create new table
 router.post('/', util.isAuthenticated, function (req, res) {
   var payload = req.body;
-  var paramsKeys = Object.keys(payload);
   var session = req.params.__session;
-  var paramsRequired = [
-    'name',
-    'moneyLimit',
-    'playersLimit',
-    'numberOfDecks',
-    'buyin'
-  ];
 
-  // Check if all params required
-  // are in the payload
-  // If not return an error
-  var checkRequired = paramsRequired.every(function (param) {
-    if (!payload[param]) {
-      return false;
-    }
-
-    return (paramsKeys.indexOf(param) > -1);
-  });
-  if (!checkRequired) {
-    return res.boom.badData('Missing params');
+  // Run common validation
+  var valid = tableValidation(config.apiMsgState, payload);
+  if (!valid) {
+    return res.boom.badData(valid);
   }
 
   var table = new Table({
@@ -63,7 +49,7 @@ router.post('/', util.isAuthenticated, function (req, res) {
       userId: session.userId,
       money: payload.buyin
     }],
-    cards: util.generateDeck(table.numberOfDecks)
+    cards: util.generateDeck(payload.numberOfDecks)
   });
 
   return table.save(function (err) {
