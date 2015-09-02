@@ -22,7 +22,8 @@ let initialState = {
       token: ''
     }
   },
-  tables: OrderedMap()
+  tables: OrderedMap(),
+  sessionExpired: false
 };
 
 const store = configureStore(initialState);
