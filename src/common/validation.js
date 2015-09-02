@@ -78,11 +78,11 @@ validation.table = function (apiMsgState, payload) {
     return INVALID_NAME_FIELD;
   }
 
-  if (payload.moneyLimit < 1 || payload.moneyLimit > 1000) {
+  if (payload.maxBuyIn < 1 || payload.maxBuyIn > 1000) {
     return MAX_BUYIN;
   }
 
-  if (payload.buyin > payload.moneyLimit) {
+  if (payload.buyin > payload.maxBuyIn) {
     return BUYIN;
   }
 
