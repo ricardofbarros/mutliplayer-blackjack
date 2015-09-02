@@ -9,12 +9,8 @@ const PASSWORD_MATCH = config.apiMsgState.user.PASSWORD_MATCH;
 const INVALID_USER_FIELD = config.apiMsgState.user.INVALID_USER_FIELD;
 const INVALID_PASS_FIELD = config.apiMsgState.user.INVALID_PASS_FIELD;
 
-async function createNew (username, password, confirmPassword) {
-  let promise = axios.post.bind(axios, url.resolve(config.baseUrl, '/api/user'), {
-    username,
-    password,
-    confirmPassword
-  });
+async function createNew (payload) {
+  let promise = axios.post.bind(axios, url.resolve(config.baseUrl, '/api/user'), payload);
 
   return await apiCallWrapper(promise, [MISSING_PARAMS, USER_EXISTS, PASSWORD_MATCH, INVALID_USER_FIELD, INVALID_PASS_FIELD]);
 }
