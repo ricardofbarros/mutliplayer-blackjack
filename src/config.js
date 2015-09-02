@@ -33,7 +33,8 @@ config.apiMsgState = {
   },
   session: {
     USER_NOT_FOUND: 'User not found',
-    LOGIN_SUCCESS: 'Logging in..'
+    LOGIN_SUCCESS: 'Logging in..',
+    ALREADY_PLAYING: 'You\'re already playing'
   },
   table: {
     INVALID_NAME_FIELD: 'Invalid table name, please use alphanumeric and underscore characters only',

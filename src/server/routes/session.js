@@ -13,6 +13,7 @@ var router = express.Router();
 var MISSING_PARAMS = config.apiMsgState.misc.MISSING_PARAMS;
 var USER_NOT_FOUND = config.apiMsgState.session.USER_NOT_FOUND;
 var LOGIN_SUCCESS = config.apiMsgState.session.LOGIN_SUCCESS;
+var ALREADY_PLAYING = config.apiMsgState.session.ALREADY_PLAYING;
 
 // Route mount path: /api/session
 
@@ -105,6 +106,11 @@ router.put('/game/:tableId', util.isAuthenticated, function (req, res) {
   // Generate a game token
   var gameToken = uuid.v4();
 
+  // User is already playing
+  if (session.game.tableId) {
+    return res.boom.badData(ALREADY_PLAYING);
+  }
+
   // Edit session with
   // the game information
   session.game = {
@@ -133,13 +139,20 @@ router.put('/game/:tableId', util.isAuthenticated, function (req, res) {
       }
 
       table.sittingPlayers.push(session.game);
-      lobbySocket.updateTable(util.tableInterfaceMap(table));
 
-      // Send 201 and the game token
-      // so the client can auth the game websocket
-      // that he is going to create
-      return res.status(201).json({
-        gameToken: gameToken
+      return table.save(function (err) {
+        if (err) {
+          return res.boom.badRequest(err);
+        }
+
+        lobbySocket.updateTable(util.tableInterfaceMap(table));
+
+        // Send 201 and the game token
+        // so the client can auth the game websocket
+        // that he is going to create
+        return res.status(201).json({
+          gameToken: gameToken
+        });
       });
     });
   });
