@@ -1,16 +1,15 @@
 import SessionApi from '../api/session';
-import { createAction } from 'redux-actions';
+import createAction from './common/createAction';
 
 export const GET_USER_INFO = 'GET_USER_INFO';
-export const APP_HYDRATE_SESSION = 'APP_HYDRATE_SESSION';
+export const LOGIN = 'LOGIN';
 
-let getUserInfo = createAction(GET_USER_INFO, async (accessToken) => {
-  let result = await SessionApi.getUserInfo(accessToken);
-  return result.data;
+export let getUserInfo = createAction(GET_USER_INFO, async (accessToken) => {
+  return await SessionApi.getUserInfo(accessToken);
+}, (obj) => { return obj.session; });
+
+export let login = createAction(LOGIN, async (user, pass) => {
+  return await SessionApi.signIn(user, pass);
 });
 
-let hydrateSession = createAction(APP_HYDRATE_SESSION, (session) => {
-  return session;
-});
-
-export default { getUserInfo, hydrateSession };
+export default { getUserInfo, login };
