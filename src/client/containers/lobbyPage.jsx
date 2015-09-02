@@ -30,7 +30,9 @@ class LobbyPage extends Component {
       });
 
       socket.on('addTable', (data) => {
+        console.log('NEW TABLE! NEW TABLE!', data)
         self.props.addTable(data);
+        console.log('adsdsd')
       });
 
       socket.on('removeTable', (data) => {
@@ -80,7 +82,7 @@ class LobbyPage extends Component {
 
 LobbyPage.propTypes = {
   session: React.PropTypes.object,
-  tables: React.PropTypes.array,
+  tables: React.PropTypes.object,
   socket: React.PropTypes.any,
   hydrateTables: React.PropTypes.func,
   createNewTable: React.PropTypes.func
