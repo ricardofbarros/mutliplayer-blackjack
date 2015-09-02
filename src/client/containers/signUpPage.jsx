@@ -6,6 +6,8 @@ import UserApi from '../api/user';
 import reactMixin from 'react-mixin';
 import toastr from 'toastr';
 import { connect } from 'react-redux';
+import { user as userValidation } from '../../common/validation';
+import { config } from '../store/cookies';
 
 @reactMixin.decorate(Navigation)
 class SignUpPage extends Component {
@@ -29,9 +31,21 @@ class SignUpPage extends Component {
     return this.setState({data: this.state.data});
   }
 
-  async signUp (user, pass, confirmPass, e) {
+  async signUp (username, password, confirmPassword, e) {
     e.preventDefault();
-    let result = await UserApi.createNew(user, pass, confirmPass);
+    let payload = {
+      username,
+      password,
+      confirmPassword
+    };
+
+    // Run common validation
+    let isNotValid = userValidation(config.apiMsgState, payload);
+    if (isNotValid) {
+      return toastr.error(isNotValid);
+    }
+
+    let result = await UserApi.createNew(payload);
 
     if (result.error) {
       toastr.error(result.data.message);
