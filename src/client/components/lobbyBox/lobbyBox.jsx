@@ -11,7 +11,7 @@ class LobbyBox extends Component {
       sittingPlayers: React.PropTypes.array,
       tableLimit: React.PropTypes.shape({
         players: React.PropTypes.number,
-        money: React.PropTypes.number
+        maxBuyIn: React.PropTypes.number
       }),
       numberOfDecks: React.PropTypes.number
     })
@@ -32,7 +32,7 @@ class LobbyBox extends Component {
           <span className='glyphicon glyphicon-user'></span>
         </div>
         <div className='col-md-5 col-md-push-2 lobby-box-info'>
-          {table.tableLimit.money}&nbsp;
+          {table.tableLimit.maxBuyIn}&nbsp;
           <span className='glyphicon glyphicon-euro'></span>
         </div>
       </div>
