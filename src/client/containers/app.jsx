@@ -18,8 +18,17 @@ class App extends Component {
   }
 
   async componentDidMount () {
+    let self = this;
     if (this.state.accessToken) {
       let result = await this.props.getUserInfo(this.state.accessToken);
+
+      // Unauthorized
+      if (result.error) {
+        Cookies.expire('accessToken');
+        setTimeout(function () {
+          self.transitionTo('login');
+        }, 500);
+      }
 
       // User is currently playing a game
       if (result.payload.table) {

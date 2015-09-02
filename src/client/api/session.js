@@ -5,6 +5,7 @@ import apiCallWrapper from './common/apiCallWrapper';
 
 const MISSING_PARAMS = config.apiMsgState.misc.MISSING_PARAMS;
 const USER_NOT_FOUND = config.apiMsgState.session.USER_NOT_FOUND;
+const TOKEN_EXPIRED = config.apiMsgState.session.TOKEN_EXPIRED;
 
 async function signIn (username, password) {
   let promise = axios.post.bind(axios, url.resolve(config.baseUrl, '/api/session'), {
@@ -32,7 +33,9 @@ async function getUserInfo (accessToken) {
     }
   });
 
-  return await apiCallWrapper(promise);
+  console.log(TOKEN_EXPIRED)
+
+  return await apiCallWrapper(promise, [TOKEN_EXPIRED]);
 }
 
 async function joinGame (accessToken, tableId) {

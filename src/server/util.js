@@ -3,13 +3,15 @@ var Session = require('./models/Session');
 var crypto = require('crypto');
 var config = require('../config');
 
+var TOKEN_EXPIRED = config.apiMsgState.session.TOKEN_EXPIRED;
+
 var util = {};
 
 util.isAuthenticated = function (req, res, next) {
   var accessToken;
   if (!req.query || !req.query.accessToken) {
     if (!req.params || !req.params.accessToken) {
-      return res.boom.unauthorized('Missing access token.');
+      return res.boom.unauthorized(TOKEN_EXPIRED);
     }
     accessToken = req.params.accessToken;
   } else {
@@ -22,7 +24,7 @@ util.isAuthenticated = function (req, res, next) {
     }
 
     if (!session) {
-      return res.boom.unauthorized('Invalid access token.');
+      return res.boom.unauthorized(TOKEN_EXPIRED);
     }
 
     if (!req.params) {
@@ -84,7 +86,7 @@ util.sessionInterfaceMap = function (session, user) {
 };
 
 util.generateDeck = function () {
-
+  return [];
 };
 
 module.exports = util;
