@@ -4,7 +4,7 @@ import './lobbyList.css';
 
 class LobbyList extends Component {
   static propTypes = {
-    tables: React.PropTypes.array
+    tables: React.PropTypes.object
   }
 
   drawColumn (i, boxes) {
@@ -18,28 +18,32 @@ class LobbyList extends Component {
   }
 
   render () {
+    let self = this;
     let tables = this.props.tables;
 
     let columns = [];
     let rows = [];
     let c = 0;
-    for (let i = 0; i < tables.length; i++) {
-      c++;
-      rows.push(tables[i]);
+    let i = 0;
 
-      // if next element is the last onSave
+    tables.forEach(function (value) {
+      c++;
+      rows.push(value);
+
+      // if this element is the last
       // print what we have
-      if (i + 1 === tables.length) {
-        columns.push(this.drawColumn(i, rows));
+      if (i + 1 === tables.size) {
+        columns.push(self.drawColumn(i, rows));
       }
 
       if (i % 3 === 2) {
-        columns.push(this.drawColumn(i, rows));
-
+        columns.push(self.drawColumn(i, rows));
         c = 0;
         rows = [];
       }
-    }
+
+      i++;
+    });
 
     return (
       <div>
