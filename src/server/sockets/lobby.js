@@ -1,5 +1,6 @@
 // Dependencies
 var HashMap = require('hashmap');
+var Session = require('../models/Session');
 
 function LobbySocket (io) {
   var self = this;
@@ -10,13 +11,17 @@ function LobbySocket (io) {
   self.server.on('connection', function (socket) {
     // Try to handshake with socket
     socket.on('auth', function (data) {
-      if (!data || !data.accessToken || data.accessToken !== 'xpto') {
-        socket.disconnect();
-        return;
-      }
+      data = data || {};
+      data.accessToken = data.accessToken || 'fail';
+      return Session.find({ accessToken: data.accessToken }, function (err, session) {
+        if (err || !session) {
+          socket.disconnect();
+          return;
+        }
 
-      // Store trusted socket
-      self.sockets.set(socket.id, socket);
+        // Store trusted socket
+        self.sockets.set(socket.id, socket);
+      });
     });
 
     socket.on('close', function () {
@@ -29,7 +34,7 @@ function LobbySocket (io) {
 
 var apiMethods = [
   'addTable',
-  'deleteTable',
+  'removeTable',
   'updateTable'
 ];
 
