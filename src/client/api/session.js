@@ -33,8 +33,6 @@ async function getUserInfo (accessToken) {
     }
   });
 
-  console.log(TOKEN_EXPIRED)
-
   return await apiCallWrapper(promise, [TOKEN_EXPIRED]);
 }
 
