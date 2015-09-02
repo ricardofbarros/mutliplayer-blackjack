@@ -38,19 +38,28 @@ router.post('/', function (req, res) {
     }
 
     var accessToken = uuid.v4();
-    var session = new Session({
-      userId: user._id,
-      accessToken: accessToken
-    });
 
-    return session.save(function (err) {
+    return Session.find({ userId: user._id }, function (err, session) {
       if (err) {
         return res.boom.badRequest(err);
       }
 
-      return res.status(201).json({
-        accessToken: accessToken,
-        message: LOGIN_SUCCESS
+      if (!session) {
+        session = new Session({
+          userId: user._id
+        });
+      }
+      session.accessToken = accessToken;
+
+      return session.save(function (err) {
+        if (err) {
+          return res.boom.badRequest(err);
+        }
+
+        return res.status(201).json({
+          accessToken: accessToken,
+          message: LOGIN_SUCCESS
+        });
       });
     });
   });
