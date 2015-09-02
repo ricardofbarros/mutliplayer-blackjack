@@ -6,6 +6,7 @@ import Cookies from '../store/cookies';
 import SessionActions from '../actions/session';
 import reactMixin from 'react-mixin';
 import Spinner from '../components/common/spinner';
+import toastr from 'toastr';
 
 @reactMixin.decorate(Navigation)
 class App extends Component {
@@ -45,11 +46,29 @@ class App extends Component {
         self.transitionTo('login');
       }, 500);
     }
+
+    // Just logged in
+    if (!self.state.accessToken && nextProps.session && nextProps.session.id) {
+      self.state.accessToken = nextProps.session.accessToken;
+      self.transitionTo('app');
+    }
   }
 
-  logout (e) {
+  async logout (e) {
     e.preventDefault();
-    this.props.logout(this.state.accessToken);
+
+    if (!this.state.accessToken) {
+      return toastr.warning('Please refresh your page, then try again...');
+    }
+
+    let result = await this.props.logout(this.state.accessToken);
+
+    // Clean up
+    if (!result.error) {
+      this.state = { accessToken: null };
+      Cookies.expire('accessToken');
+      this.transitionTo('login');
+    }
   }
 
   render () {
