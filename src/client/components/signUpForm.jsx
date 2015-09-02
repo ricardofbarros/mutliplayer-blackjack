@@ -5,7 +5,11 @@ import SubmitBtn from './common/submitBtn';
 
 class SignUpForm extends Component {
   static propTypes = {
-    data: React.PropTypes.object.isRequired,
+    data: React.PropTypes.shape({
+      username: React.PropTypes.string.isRequired,
+      password: React.PropTypes.string.isRequired,
+      confirmPassword: React.PropTypes.string.isRequired
+    }),
     onChange: React.PropTypes.func.isRequired,
     onSave: React.PropTypes.func.isRequired
   }

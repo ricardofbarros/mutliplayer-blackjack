@@ -11,6 +11,10 @@ import { config } from '../store/cookies';
 
 @reactMixin.decorate(Navigation)
 class SignUpPage extends Component {
+  static propTypes = {
+    session: React.PropTypes.object
+  }
+
   constructor () {
     super();
     this.state = {
@@ -70,10 +74,6 @@ class SignUpPage extends Component {
     );
   }
 }
-
-SignUpPage.propTypes = {
-  session: React.PropTypes.object
-};
 
 function mapStateToProps (state) {
   return {

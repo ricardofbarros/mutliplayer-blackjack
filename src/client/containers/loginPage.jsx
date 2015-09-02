@@ -10,6 +10,12 @@ import { connect } from 'react-redux';
 
 @reactMixin.decorate(Navigation)
 class LoginPage extends Component {
+  static propTypes = {
+    session: React.PropTypes.object,
+    login: React.PropTypes.func,
+    getUserInfo: React.PropTypes.func
+  }
+
   constructor () {
     super();
     this.state = {
@@ -58,12 +64,6 @@ class LoginPage extends Component {
     );
   }
 }
-
-LoginPage.propTypes = {
-  session: React.PropTypes.object,
-  login: React.PropTypes.func,
-  getUserInfo: React.PropTypes.func
-};
 
 function mapStateToProps (state) {
   return {

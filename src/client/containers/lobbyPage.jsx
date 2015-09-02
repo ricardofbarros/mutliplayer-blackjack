@@ -14,6 +14,14 @@ import LobbyTableModal from '../components/lobbyTableModal/lobbyTableModal';
 
 @reactMixin.decorate(Navigation)
 class LobbyPage extends Component {
+  static propTypes = {
+    session: React.PropTypes.object,
+    tables: React.PropTypes.object,
+    socket: React.PropTypes.any,
+    hydrateTables: React.PropTypes.func,
+    createNewTable: React.PropTypes.func
+  }
+
   componentDidMount () {
     let self = this;
     if (!self.props.session.id) {
@@ -87,14 +95,6 @@ class LobbyPage extends Component {
     );
   }
 }
-
-LobbyPage.propTypes = {
-  session: React.PropTypes.object,
-  tables: React.PropTypes.object,
-  socket: React.PropTypes.any,
-  hydrateTables: React.PropTypes.func,
-  createNewTable: React.PropTypes.func
-};
 
 function mapStateToProps (state) {
   return {
