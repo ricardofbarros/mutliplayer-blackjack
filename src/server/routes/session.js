@@ -43,6 +43,7 @@ router.post('/', function (req, res) {
       if (err) {
         return res.boom.badRequest(err);
       }
+      session = session[0] || false;
 
       if (!session) {
         session = new Session({
