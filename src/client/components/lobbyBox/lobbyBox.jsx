@@ -29,11 +29,11 @@ class LobbyBox extends Component {
         </div>
         <div className='col-md-3 col-md-push-2 lobby-box-info'>
           {table.sittingPlayers.length} / {table.tableLimit.players}&nbsp;
-          <span className='glyphicon glyphicon-user' aria-hidden='true'></span>
+          <span className='glyphicon glyphicon-user'></span>
         </div>
         <div className='col-md-5 col-md-push-2 lobby-box-info'>
           {table.tableLimit.money}&nbsp;
-          <span className='glyphicon glyphicon-euro' aria-hidden='true'></span>
+          <span className='glyphicon glyphicon-euro'></span>
         </div>
       </div>
     );
