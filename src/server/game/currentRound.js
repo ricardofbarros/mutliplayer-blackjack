@@ -6,9 +6,10 @@ var Map = require('immutable').Map;
 function CurrentRound (playersPlaying, dealerHand) {
   // Structure :
   //
-  // playersPlaying = Map(id: {
+  // playersPlaying || playersStand = Map(id: {
   // 	hand: [card, card, ...],
   // 	bet: Number,
+  // 	stand: false
   // });
   //
   // dealerHand = {
@@ -19,6 +20,7 @@ function CurrentRound (playersPlaying, dealerHand) {
 
   this.dealerHand = dealerHand;
   this.playersPlaying = Map(playersPlaying);
+  this.playersStand = Map();
 }
 
 util.inherits(CurrentRound, EventEmitter);
@@ -37,7 +39,19 @@ CurrentRound.prototype.playerHit = function (playerId, card) {
   this.playersPlaying = this.playersPlaying.set(playerId, player);
 };
 
-CurrentRound.prototype.dealerHit = function (card) {
+CurrentRound.prototype.playerStand = function (playerId) {
+  var player = this.playersPlaying.get(playerId);
+  this.playersPlaying = this.playersPlaying.delete(playerId);
+
+  // Move player to playersStand
+  this.playersStand = this.playersStand.set(playerId, player);
+};
+
+CurrentRound.prototype.dealerHit = function (card, hidden) {
+  if (hidden) {
+    this.dealerHand.hidden = card;
+    return;
+  }
   this.dealerHand.visible.push(card);
 };
 
