@@ -10,7 +10,16 @@ module.exports = {
   cache: true,
   entry: {
     module: path.join(srcPath, 'client', 'main.jsx'),
-    common: ['react', 'react-router', 'alt']
+    common: [
+      'react',
+      'react-router',
+      'redux',
+      'react-mixin',
+      'react-redux',
+      'toastr',
+      'socket.io-client',
+      'axios'
+    ]
   },
   resolve: {
     root: srcPath,
