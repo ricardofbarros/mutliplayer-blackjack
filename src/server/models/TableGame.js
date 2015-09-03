@@ -67,7 +67,7 @@ TableGame.static.kickAndIncrementSitOuts = function (tableId, cb) {
     });
 
     return tableGame.save(function (err) {
-      return cb(err, playersKicked);
+      return cb(err, tableGame.playersSeatedOut, playersKicked);
     });
   });
 };
