@@ -45,10 +45,31 @@ TableGame.static.removeSitOut = function (tableId, userId, cb) {
   }, cb);
 };
 
-TableGame.static.kickSitOuts = function (tableId, cb) {
-  return this.update({}, {
-    $pull: { 'playersSeatedOut.rounds': { $gt: 5 } }
-  }, cb);
+TableGame.static.kickAndIncrementSitOuts = function (tableId, cb) {
+  return this.findOne({ tableId: tableId }, function (err, tableGame) {
+    if (err || !tableGame) {
+      return cb(err || new Error('Didn\'t find the table'));
+    }
+
+    // remove / kick players
+    var playersKicked = [];
+    tableGame.playersSeatedOut.filter(function (player) {
+      if (!player.rounds < 6) {
+        playersKicked.push(player.userId);
+        return false;
+      }
+      return true;
+    });
+
+    tableGame.playersSeatedOut.map(function (player) {
+      player.rounds++;
+      return player;
+    });
+
+    return tableGame.save(function (err) {
+      return cb(err, playersKicked);
+    });
+  });
 };
 
 module.exports = mongoose.model('TableGame', TableGame);
