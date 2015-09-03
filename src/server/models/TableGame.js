@@ -24,4 +24,31 @@ TableGame.statics.popCard = function (tableId, cb) {
   });
 };
 
+TableGame.static.addSitOut = function (tableId, userId, cb) {
+  return this.update({
+    tableId: tableId
+  }, {
+    $addToSet: {
+      playersSeatedOut: {
+        userId: userId,
+        rounds: 1
+      }
+    }
+  }, cb);
+};
+
+TableGame.static.removeSitOut = function (tableId, userId, cb) {
+  return this.update({
+    tableId: tableId
+  }, {
+    $pull: { 'playersSeatedOut.userId': userId }
+  }, cb);
+};
+
+TableGame.static.kickSitOuts = function (tableId, cb) {
+  return this.update({}, {
+    $pull: { 'playersSeatedOut.rounds': { $gt: 5 } }
+  }, cb);
+};
+
 module.exports = mongoose.model('TableGame', TableGame);
