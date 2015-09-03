@@ -39,11 +39,10 @@ router.post('/', function (req, res) {
 
     var accessToken = uuid.v4();
 
-    return Session.find({ userId: user._id }, function (err, session) {
+    return Session.findOne({ userId: user._id }, function (err, session) {
       if (err) {
         return res.boom.badRequest(err);
       }
-      session = session[0] || false;
 
       if (!session) {
         session = new Session({
