@@ -13,6 +13,10 @@ config.mongoDB = {
   database: 'blackjack'
 };
 
+config.bunyan = {
+  name: 'multiplayer-blackjack'
+};
+
 config.server = {
   hostname: 'localhost',
   port: 3000,
