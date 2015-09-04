@@ -3,27 +3,27 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var Map = require('immutable').Map;
 
-function CurrentRound (playersPlaying, dealerHand) {
-  // Structure :
-  //
-  // playersPlaying || playersStand = Map(id: {
-  // 	hand: [card, card, ...],
-  // 	bet: Number,
-  // 	stand: false
-  // });
-  //
-  // dealerHand = {
-  // 	visible: [],
-  // 	hidden: ''
-  // };
-  //
+function CurrentRound (playersPlaying) {
+  var players = {};
+  playersPlaying.forEach(function (id) {
+    players[id] = {
+      hand: [],
+      bet: 0,
+      stand: false
+    };
+  });
 
-  this.dealerHand = dealerHand;
-  this.playersPlaying = Map(playersPlaying);
+  this.dealerHand = {
+    visible: [],
+    hidden: ''
+  };
+  this.playersPlaying = Map(players);
   this.playersStand = Map();
 }
 
 util.inherits(CurrentRound, EventEmitter);
+
+/*              START GAME EVENTS                 */
 
 CurrentRound.prototype.playerBet = function (playerId, bet) {
   var player = this.playersPlaying.get(playerId);
@@ -40,12 +40,26 @@ CurrentRound.prototype.playerHit = function (playerId, card) {
 };
 
 CurrentRound.prototype.playerStand = function (playerId) {
+  // TODO review this
   var player = this.playersPlaying.get(playerId);
   this.playersPlaying = this.playersPlaying.delete(playerId);
 
   // Move player to playersStand
   this.playersStand = this.playersStand.set(playerId, player);
 };
+
+// Empty methods, we never known when we might need this
+CurrentRound.prototype.playerSitout = function () {};
+CurrentRound.prototype.playerPlays = function () {};
+CurrentRound.prototype.endRound = function () {};
+CurrentRound.prototype.startNewRound = function () {};
+CurrentRound.prototype.dealCardsToAll = function () {};
+CurrentRound.prototype.dealCardsToDealer = function () {};
+CurrentRound.prototype.kickPlayer = function () {};
+CurrentRound.prototype.dealHiddenCard = function () {};
+CurrentRound.prototype.newSetOfCards = function () {};
+
+/*              END GAME EVENTS                 */
 
 CurrentRound.prototype.dealerHit = function (card, hidden) {
   if (hidden) {
