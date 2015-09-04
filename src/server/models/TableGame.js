@@ -18,6 +18,24 @@ TableGame.statics.replaceCards = function (tableId, cards, cb) {
   }, cb);
 };
 
+TableGame.static.popNumOfCards = function (tableId, num, cb) {
+  return this.findOne({
+    tableId: tableId
+  }, function (err, tableGame) {
+    if (err || !tableGame) {
+      return cb(err || new Error('Couldn\'t find the table'));
+    }
+
+    var cards = [];
+    var c = 0;
+    while (c < num) {
+      cards.push(tableGame.cards.pop());
+    }
+
+    return tableGame.save(cb);
+  });
+};
+
 TableGame.statics.popCard = function (tableId, cb) {
   return this.findOneAndUpdate({ tableId: tableId }, {
     $pop: { cards: -1 }
