@@ -10,6 +10,14 @@ var TableGame = new Schema({
   cards: Array
 });
 
+TableGame.statics.replaceCards = function (tableId, cards, cb) {
+  return this.update({
+    tableId: tableId
+  }, {
+    $set: { cards: cards }
+  }, cb);
+};
+
 TableGame.statics.popCard = function (tableId, cb) {
   return this.findOneAndUpdate({ tableId: tableId }, {
     $pop: { cards: -1 }
