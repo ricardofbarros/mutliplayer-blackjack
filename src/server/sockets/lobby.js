@@ -1,11 +1,11 @@
 // Dependencies
-var HashMap = require('hashmap');
+var Map = require('immutable').Map;
 var Session = require('../models/Session');
 
 function LobbySocket (io) {
   var self = this;
   self.server = io.of('/lobby');
-  self.sockets = new HashMap();
+  self.sockets = new Map();
 
   // On new connection
   self.server.on('connection', function (socket) {
@@ -22,13 +22,13 @@ function LobbySocket (io) {
         }
 
         // Store trusted socket
-        self.sockets.set(socket.id, socket);
+        self.sockets = self.sockets.set(socket.id, socket);
       });
     });
 
     socket.on('close', function () {
       socket.disconnect();
-      self.sockets.remove(socket.id);
+      self.sockets = self.sockets.delete(socket.id);
       socket = null;
     });
   });
