@@ -32,7 +32,9 @@ TableGame.static.popNumOfCards = function (tableId, num, cb) {
       cards.push(tableGame.cards.pop());
     }
 
-    return tableGame.save(cb);
+    return tableGame.save(function (err) {
+      return cb(err, cards);
+    });
   });
 };
 
