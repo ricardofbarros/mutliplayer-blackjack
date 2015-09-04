@@ -1,7 +1,7 @@
 // Dependencies
 var Session = require('./models/Session');
 var crypto = require('crypto');
-var config = require('../config');
+var config = require('../config')
 
 var TOKEN_EXPIRED = config.apiMsgState.session.TOKEN_EXPIRED;
 
@@ -85,8 +85,22 @@ util.sessionInterfaceMap = function (session, user) {
   };
 };
 
-util.generateDeck = function () {
-  return [];
+util.generateDeck = function (numberOfDecks) {
+  var suits = [
+    'c', // clubs
+    'd', // diamonds
+    'h', // hearts
+    's' // spades
+  ];
+  var deck = [];
+
+  suits.forEach(function (suit) {
+    for (var i = 1; i < 13; i++) {
+      deck.push(suit + i);
+    }
+  });
+
+  return deck;
 };
 
 module.exports = util;
