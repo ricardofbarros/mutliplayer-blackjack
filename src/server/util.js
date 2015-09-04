@@ -96,8 +96,10 @@ util.generateDecks = function (numberOfDecks) {
 
   suits.forEach(function (suit) {
     for (var i = 1; i < 14; i++) {
-      for (var n = 0; n < numberOfDecks; n++) {
+      var c = 0;
+      while (c < numberOfDecks) {
         deck.push(suit + i);
+        c++;
       }
     }
   });
