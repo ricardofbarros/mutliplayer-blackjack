@@ -85,7 +85,7 @@ util.sessionInterfaceMap = function (session, user) {
   };
 };
 
-util.generateDeck = function (numberOfDecks) {
+util.generateDecks = function (numberOfDecks) {
   var suits = [
     'c', // clubs
     'd', // diamonds
